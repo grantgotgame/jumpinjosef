@@ -16,12 +16,14 @@ var scrollPos;
 var clouds;
 var mountains;
 var trees_x;
+var treePos_y;
 
 function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
 	gameChar_x = width / 2;
 	gameChar_y = floorPos_y;
+	treePos_y = floorPos_y - 250;
 
 	// Boolean variables to control the movement of the game character.
 	isLeft = false;
@@ -31,6 +33,7 @@ function setup() {
 	scrollPos = 0;
 
 	// Initialise arrays of scenery objects.
+	trees_x = [200, 350, 700, 850];
 }
 
 function draw() {
@@ -45,6 +48,25 @@ function draw() {
 	// Draw mountains.
 
 	// Draw trees.
+
+	for (var i = 0; i < trees_x.length; i++) {
+		//begin tree drawing
+
+		//trunk
+		fill(43, 23, 15);
+		rect(trees_x[i], treePos_y, 50, 250);
+
+		//head
+		fill(10, 43, 19);
+		ellipse(trees_x[i] + 25, treePos_y, 200);
+
+		//fruit
+		fill(186, 17, 11);
+		ellipse(trees_x[i], treePos_y, 20);
+		ellipse(trees_x[i] + 60, treePos_y + 50, 20);
+
+		//end tree drawing
+	}
 
 	// Draw canyons
 

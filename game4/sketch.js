@@ -15,6 +15,9 @@ var scrollPos;
 
 var clouds;
 var mountains;
+var canyons;
+var collectables;
+
 var trees_x;
 var treePos_y;
 
@@ -34,7 +37,7 @@ function setup() {
 
 	// Initialise arrays of scenery objects.
 	//initialize trees
-	trees_x = [200, 350, 700, 850];
+	trees_x = [200, 350, 700];
 
 	//initialize clouds
 	clouds = [{
@@ -49,25 +52,45 @@ function setup() {
 		x_pos: 700,
 		y_pos: 50,
 		size: 75
-	}, {
-		x_pos: 900,
-		y_pos: 450,
-		size: 150
 	}];
 
 	//initialize mountains
 	mountains = [{
 		x_pos: 75,
-		size: 100,
+		size: 100
 	}, {
 		x_pos: 150,
-		size: 200,
+		size: 200
+	}, {
+		x_pos: 750,
+		size: 50
+	}];
+
+	//initialize canyons
+	canyons = [{
+		x_pos: 50,
+		width: 100
+	}, {
+		x_pos: 250,
+		width: 75
+	}, {
+		x_pos: 750,
+		width: 50
+	}];
+
+	//initialize collectables
+	collectables = [{
+		x_pos: 200,
+		y_pos: 100,
+		size: 50
 	}, {
 		x_pos: 400,
-		size: 50,
+		y_pos: 200,
+		size: 100
 	}, {
-		x_pos: 850,
-		size: 1000,
+		x_pos: 800,
+		y_pos: 150,
+		size: 75
 	}];
 }
 
@@ -131,7 +154,29 @@ function draw() {
 
 	// Draw canyons
 
+	for (i = 0; i < canyons.length; i++) {
+		//begin canyon drawing
+
+		fill(33, 10, 6);
+		rect(canyons[i].x_pos, floorPos_y, canyons[i].width, height);
+		fill(240, 36, 0);
+		triangle(canyons[i].x_pos, floorPos_y, canyons[i].x_pos + canyons[i].width, floorPos_y, canyons[i].x_pos + canyons[i].width / 2, height);
+
+		//end canyon drawing
+	}
+
 	// Draw collectable items
+
+	for (i = 0; i < collectables.length; i++) {
+		//begin collectable drawing
+
+		fill(255, 247, 0);
+		ellipse(collectables[i].x_pos, floorPos_y - collectables[i].y_pos, collectables[i].size * 0.5);
+		fill(217, 166, 28);
+		rect(collectables[i].x_pos - collectables[i].size * 0.05, floorPos_y - collectables[i].y_pos - collectables[i].size * 0.15, collectables[i].size * 0.1, collectables[i].size * 0.3);
+
+		//end collectable drawing
+	}
 
 	// Draw the game character - this must be last
 

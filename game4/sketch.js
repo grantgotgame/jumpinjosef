@@ -34,22 +34,50 @@ function setup() {
 
 	// Initialise arrays of scenery objects.
 	trees_x = [200, 350, 700, 850];
+	clouds = [{
+		x_pos: 200,
+		y_pos: 50,
+		size: 50
+	}, {
+		x_pos: 500,
+		y_pos: 150,
+		size: 100
+	}, {
+		x_pos: 700,
+		y_pos: 50,
+		size: 75
+	}, {
+		x_pos: 900,
+		y_pos: 450,
+		size: 150
+	}];
 }
 
 function draw() {
 	background(100, 155, 255); // fill the sky blue
-
 	noStroke();
-	fill(0, 155, 0);
-	rect(0, floorPos_y, width, height / 4); // draw some green ground
+
+	var i;
 
 	// Draw clouds.
+	for (i = 0; i < clouds.length; i++) {
+		//begin cloud drawing
+
+		fill(255);
+		ellipse(clouds[i].x_pos + clouds[i].size * 0.5, clouds[i].y_pos, clouds[i].size * 1.2);
+		ellipse(clouds[i].x_pos + clouds[i].size, clouds[i].y_pos, clouds[i].size);
+		ellipse(clouds[i].x_pos, clouds[i].y_pos, clouds[i].size);
+
+		//end cloud drawing
+	}
+
+	fill(0, 155, 0);
+	rect(0, floorPos_y, width, height / 4); // draw some green ground
 
 	// Draw mountains.
 
 	// Draw trees.
-
-	for (var i = 0; i < trees_x.length; i++) {
+	for (i = 0; i < trees_x.length; i++) {
 		//begin tree drawing
 
 		//trunk

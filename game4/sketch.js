@@ -37,7 +37,7 @@ function setup() {
 
 	// Initialise arrays of scenery objects.
 	//initialize trees
-	trees_x = [200, 350, 700];
+	trees_x = [200, 350, 700, 850, 1000, 1150, -150, -300, 1300, 1450, 1600, 1750, 2500, 2650, 3000, 3150];
 
 	//initialize clouds
 	clouds = [{
@@ -52,6 +52,26 @@ function setup() {
 		x_pos: 700,
 		y_pos: 50,
 		size: 75
+	}, {
+		x_pos: 900,
+		y_pos: 200,
+		size: 25
+	}, {
+		x_pos: -500,
+		y_pos: 175,
+		size: 120
+	}, {
+		x_pos: 1200,
+		y_pos: 80,
+		size: 90
+	}, {
+		x_pos: 1500,
+		y_pos: 120,
+		size: 134
+	}, {
+		x_pos: 1900,
+		y_pos: 250,
+		size: 40
 	}];
 
 	//initialize mountains
@@ -64,6 +84,15 @@ function setup() {
 	}, {
 		x_pos: 750,
 		size: 50
+	}, {
+		x_pos: 1900,
+		size: 900
+	}, {
+		x_pos: -750,
+		size: 250
+	}, {
+		x_pos: 7520,
+		size: 5000
 	}];
 
 	//initialize canyons
@@ -76,6 +105,15 @@ function setup() {
 	}, {
 		x_pos: 750,
 		width: 50
+	}, {
+		x_pos: -850,
+		width: 500
+	}, {
+		x_pos: 1750,
+		width: 80
+	}, {
+		x_pos: 7050,
+		width: 5000
 	}];
 
 	//initialize collectables
@@ -91,14 +129,49 @@ function setup() {
 		x_pos: 800,
 		y_pos: 150,
 		size: 75
+	}, {
+		x_pos: 1800,
+		y_pos: 40,
+		size: 75
+	}, {
+		x_pos: -800,
+		y_pos: 50,
+		size: 30
+	}, {
+		x_pos: 900,
+		y_pos: 75,
+		size: 70
+	}, {
+		x_pos: 1000,
+		y_pos: 130,
+		size: 90
+	}, {
+		x_pos: 1200,
+		y_pos: 150,
+		size: 75
+	}, {
+		x_pos: 1300,
+		y_pos: 200,
+		size: 10
+	}, {
+		x_pos: 1600,
+		y_pos: 300,
+		size: 20
 	}];
 }
 
 function draw() {
+	var i;
+
 	background(100, 155, 255); // fill the sky blue
 	noStroke();
 
-	var i;
+	fill(0, 155, 0);
+	rect(0, floorPos_y, width, height / 4); // draw some green ground
+
+	//scroll background when character reaches edge of screen
+	push();
+	translate(scrollPos, 0);
 
 	// Draw mountains.
 	for (i = 0; i < mountains.length; i++) {
@@ -128,9 +201,6 @@ function draw() {
 
 		//end cloud drawing
 	}
-
-	fill(0, 155, 0);
-	rect(0, floorPos_y, width, height / 4); // draw some green ground
 
 	// Draw trees.
 	for (i = 0; i < trees_x.length; i++) {
@@ -178,8 +248,9 @@ function draw() {
 		//end collectable drawing
 	}
 
-	// Draw the game character - this must be last
+	pop(); //stop scrolling background
 
+	// Draw the game character - this must be last
 	//begin character drawing
 
 	//body

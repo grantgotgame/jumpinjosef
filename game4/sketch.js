@@ -33,7 +33,10 @@ function setup() {
 	scrollPos = 0;
 
 	// Initialise arrays of scenery objects.
+	//initialize trees
 	trees_x = [200, 350, 700, 850];
+
+	//initialize clouds
 	clouds = [{
 		x_pos: 200,
 		y_pos: 50,
@@ -51,6 +54,21 @@ function setup() {
 		y_pos: 450,
 		size: 150
 	}];
+
+	//initialize mountains
+	mountains = [{
+		x_pos: 75,
+		size: 100,
+	}, {
+		x_pos: 150,
+		size: 200,
+	}, {
+		x_pos: 400,
+		size: 50,
+	}, {
+		x_pos: 850,
+		size: 1000,
+	}];
 }
 
 function draw() {
@@ -58,6 +76,23 @@ function draw() {
 	noStroke();
 
 	var i;
+
+	// Draw mountains.
+	for (i = 0; i < mountains.length; i++) {
+		//begin mountain drawing
+
+		fill(205, 186, 217);
+		triangle(mountains[i].x_pos + mountains[i].size, floorPos_y - mountains[i].size * 1.76, mountains[i].x_pos + mountains[i].size * 2, floorPos_y, mountains[i].x_pos, floorPos_y);
+		fill(255);
+		triangle(mountains[i].x_pos + mountains[i].size, floorPos_y - mountains[i].size * 1.76, mountains[i].x_pos + mountains[i].size * 1.5, floorPos_y - mountains[i].size * 0.87, mountains[i].x_pos + mountains[i].size * 0.5, floorPos_y - mountains[i].size * 0.87);
+
+		fill(205, 186, 217);
+		triangle(mountains[i].x_pos + mountains[i].size * 1.75, floorPos_y - mountains[i].size * 1.32, mountains[i].x_pos + mountains[i].size * 3, floorPos_y, mountains[i].x_pos + mountains[i].size * 0.75, floorPos_y);
+		fill(255);
+		triangle(mountains[i].x_pos + mountains[i].size * 1.75, floorPos_y - mountains[i].size * 1.32, mountains[i].x_pos + mountains[i].size * 2.17, floorPos_y - mountains[i].size * 0.87, mountains[i].x_pos + mountains[i].size * 1.4, floorPos_y - mountains[i].size * 0.87);
+
+		//end mountain drawing
+	}
 
 	// Draw clouds.
 	for (i = 0; i < clouds.length; i++) {
@@ -73,8 +108,6 @@ function draw() {
 
 	fill(0, 155, 0);
 	rect(0, floorPos_y, width, height / 4); // draw some green ground
-
-	// Draw mountains.
 
 	// Draw trees.
 	for (i = 0; i < trees_x.length; i++) {

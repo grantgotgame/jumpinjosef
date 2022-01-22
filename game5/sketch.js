@@ -197,13 +197,14 @@ function draw() {
 	// Draw canyons.
 	for (i = 0; i < canyons.length; i++) {
 		drawCanyon(canyons[i]);
+		checkCanyon(canyons[i]); //check for collisions
 	}
 
 	// Draw collectable items.
 	for (i = 0; i < collectables.length; i++) {
 		if (!collectables[i].isFound) {
 			drawCollectable(collectables[i]);
-			checkCollectable(collectables[i]);
+			checkCollectable(collectables[i]); //check for collisions
 		}
 	}
 
@@ -239,6 +240,11 @@ function draw() {
 	}
 	else {
 		isFalling = false;
+	}
+
+	//Logic to make the game character plummet.
+	if (isPlummeting) {
+		gameChar_y += 5;
 	}
 
 	// Update real position of gameChar for collision detection.
@@ -578,7 +584,10 @@ function drawCanyon(t_canyon) {
 // Function to check character is over a canyon.
 
 function checkCanyon(t_canyon) {
-
+	//character plummets if canyon is touched
+	if (gameChar_world_x > t_canyon.x_pos && gameChar_world_x < t_canyon.x_pos + t_canyon.width && gameChar_y >= floorPos_y) {
+		isPlummeting = true;
+	}
 }
 
 // ----------------------------------

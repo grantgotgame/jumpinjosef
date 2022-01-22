@@ -4,6 +4,12 @@ The Game Project 5 - Bring it all together
 
 */
 
+var clouds;
+var mountains;
+var trees_x;
+var canyons;
+var collectables;
+
 var gameChar_x;
 var gameChar_y;
 var floorPos_y;
@@ -96,6 +102,70 @@ function setup() {
 		x_pos: 7520,
 		size: 5000
 	}];
+
+	//initialize canyons
+	canyons = [{
+		x_pos: 50,
+		width: 100
+	}, {
+		x_pos: 250,
+		width: 75
+	}, {
+		x_pos: 750,
+		width: 50
+	}, {
+		x_pos: -850,
+		width: 500
+	}, {
+		x_pos: 1750,
+		width: 80
+	}, {
+		x_pos: 7050,
+		width: 5000
+	}];
+
+	//initialize collectables
+	collectables = [{
+		x_pos: 200,
+		y_pos: 100,
+		size: 50
+	}, {
+		x_pos: 400,
+		y_pos: 200,
+		size: 100
+	}, {
+		x_pos: 800,
+		y_pos: 150,
+		size: 75
+	}, {
+		x_pos: 1800,
+		y_pos: 40,
+		size: 75
+	}, {
+		x_pos: -800,
+		y_pos: 50,
+		size: 30
+	}, {
+		x_pos: 900,
+		y_pos: 75,
+		size: 70
+	}, {
+		x_pos: 1000,
+		y_pos: 130,
+		size: 90
+	}, {
+		x_pos: 1200,
+		y_pos: 150,
+		size: 75
+	}, {
+		x_pos: 1300,
+		y_pos: 200,
+		size: 10
+	}, {
+		x_pos: 1600,
+		y_pos: 300,
+		size: 20
+	}];
 }
 
 function draw() {
@@ -121,8 +191,14 @@ function draw() {
 	}
 
 	// Draw canyons.
+	for (i = 0; i < canyons.length; i++) {
+		drawCanyon(canyons[i]);
+	}
 
 	// Draw collectable items.
+	for (i = 0; i < collectables.length; i++) {
+		drawCollectable(collectables[i]);
+	}
 
 	// Draw game character.
 
@@ -493,7 +569,14 @@ function drawTrees() {
 // Function to draw canyon objects.
 
 function drawCanyon(t_canyon) {
+	//begin canyon drawing
 
+	fill(33, 10, 6);
+	rect(t_canyon.x_pos, floorPos_y, t_canyon.width, height);
+	fill(240, 36, 0);
+	triangle(t_canyon.x_pos, floorPos_y, t_canyon.x_pos + t_canyon.width, floorPos_y, t_canyon.x_pos + t_canyon.width / 2, height);
+
+	//end canyon drawing
 }
 
 // Function to check character is over a canyon.
@@ -509,7 +592,14 @@ function checkCanyon(t_canyon) {
 // Function to draw collectable objects.
 
 function drawCollectable(t_collectable) {
+	//begin collectable drawing
 
+	fill(255, 247, 0);
+	ellipse(t_collectable.x_pos, floorPos_y - t_collectable.y_pos, t_collectable.size * 0.5);
+	fill(217, 166, 28);
+	rect(t_collectable.x_pos - t_collectable.size * 0.05, floorPos_y - t_collectable.y_pos - t_collectable.size * 0.15, t_collectable.size * 0.1, t_collectable.size * 0.3);
+
+	//end collectable drawing
 }
 
 // Function to check character has collected an item.

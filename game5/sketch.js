@@ -175,6 +175,10 @@ function draw() {
 	fill(0, 155, 0);
 	rect(0, floorPos_y, width, height / 4); // draw some green ground
 
+	//begin background scroll
+	push();
+	translate(scrollPos, 0);
+
 	// Draw clouds.
 	for (i = 0; i < clouds.length; i++) {
 		drawClouds();
@@ -199,6 +203,8 @@ function draw() {
 	for (i = 0; i < collectables.length; i++) {
 		drawCollectable(collectables[i]);
 	}
+
+	pop(); //end background scroll
 
 	// Draw game character.
 

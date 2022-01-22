@@ -78,6 +78,13 @@ function draw() {
 	}
 
 	// Logic to make the game character rise and fall.
+	if (gameChar_y < floorPos_y) {
+		gameChar_y += 2;
+		isFalling = true;
+	}
+	else {
+		isFalling = false;
+	}
 
 	// Update real position of gameChar for collision detection.
 	gameChar_world_x = gameChar_x - scrollPos;

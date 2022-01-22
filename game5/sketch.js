@@ -127,39 +127,39 @@ function setup() {
 	//initialize collectables
 	collectables = [{
 		x_pos: 200,
-		y_pos: 100,
+		y_pos: 400,
 		size: 50
 	}, {
 		x_pos: 400,
-		y_pos: 200,
+		y_pos: 300,
 		size: 100
 	}, {
 		x_pos: 800,
-		y_pos: 150,
+		y_pos: 350,
 		size: 75
 	}, {
 		x_pos: 1800,
-		y_pos: 40,
+		y_pos: 340,
 		size: 75
 	}, {
 		x_pos: -800,
-		y_pos: 50,
+		y_pos: 350,
 		size: 30
 	}, {
 		x_pos: 900,
-		y_pos: 75,
+		y_pos: 375,
 		size: 70
 	}, {
 		x_pos: 1000,
-		y_pos: 130,
+		y_pos: 330,
 		size: 90
 	}, {
 		x_pos: 1200,
-		y_pos: 150,
+		y_pos: 350,
 		size: 75
 	}, {
 		x_pos: 1300,
-		y_pos: 200,
+		y_pos: 300,
 		size: 10
 	}, {
 		x_pos: 1600,
@@ -201,7 +201,10 @@ function draw() {
 
 	// Draw collectable items.
 	for (i = 0; i < collectables.length; i++) {
-		drawCollectable(collectables[i]);
+		if (!collectables[i].isFound) {
+			drawCollectable(collectables[i]);
+			checkCollectable(collectables[i]);
+		}
 	}
 
 	pop(); //end background scroll
@@ -263,13 +266,6 @@ function keyPressed() {
 	if (keyCode == 32 && gameChar_y == floorPos_y) {
 		gameChar_y -= 100;
 	}
-
-	//open up the console to see how these work
-	console.log("keyPressed: " + key);
-	console.log("keyPressed: " + keyCode);
-	console.log("isLeft: " + isLeft);
-	console.log("isRight: " + isRight);
-
 }
 
 function keyReleased() {
@@ -284,12 +280,6 @@ function keyReleased() {
 	if (keyCode == RIGHT_ARROW) {
 		isRight = false;
 	}
-
-	console.log("keyReleased: " + key);
-	console.log("keyReleased: " + keyCode);
-	console.log("isLeft: " + isLeft);
-	console.log("isRight: " + isRight);
-
 }
 
 
@@ -601,9 +591,9 @@ function drawCollectable(t_collectable) {
 	//begin collectable drawing
 
 	fill(255, 247, 0);
-	ellipse(t_collectable.x_pos, floorPos_y - t_collectable.y_pos, t_collectable.size * 0.5);
+	ellipse(t_collectable.x_pos, t_collectable.y_pos, t_collectable.size * 0.5);
 	fill(217, 166, 28);
-	rect(t_collectable.x_pos - t_collectable.size * 0.05, floorPos_y - t_collectable.y_pos - t_collectable.size * 0.15, t_collectable.size * 0.1, t_collectable.size * 0.3);
+	rect(t_collectable.x_pos - t_collectable.size * 0.05, t_collectable.y_pos - t_collectable.size * 0.15, t_collectable.size * 0.1, t_collectable.size * 0.3);
 
 	//end collectable drawing
 }
@@ -611,5 +601,8 @@ function drawCollectable(t_collectable) {
 // Function to check character has collected an item.
 
 function checkCollectable(t_collectable) {
-
+	//gather collectable when touched
+	if (dist(gameChar_world_x, gameChar_y - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
+		t_collectable.isFound = true;
+	}
 }

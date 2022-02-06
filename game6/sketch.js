@@ -24,166 +24,21 @@ var isRight;
 var isFalling;
 var isPlummeting;
 
-var game_score = 0;
+var game_score;
+var lives;
 
 function setup() {
+	// Create environment
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
-	gameChar_x = width / 2;
-	gameChar_y = floorPos_y;
 	treePos_y = floorPos_y - 250;
 
-	// Variable to control the background scrolling.
-	scrollPos = 0;
+	// Initialize score and lives
+	game_score = 0;
+	lives = 3;
 
-	// Variable to store the real position of the gameChar in the game
-	// world. Needed for collision detection.
-	gameChar_world_x = gameChar_x - scrollPos;
-
-	// Boolean variables to control the movement of the game character.
-	isLeft = false;
-	isRight = false;
-	isFalling = false;
-	isPlummeting = false;
-
-	// Initialise arrays of scenery objects.
-
-	//initialize trees
-	trees_x = [200, 350, 700, 850, 1000, 1150, -150, -300, 1300, 1450, 1600, 1750, 2500, 2650, 3000, 3150];
-
-	//initialize clouds
-	clouds = [{
-		x_pos: 200,
-		y_pos: 50,
-		size: 50
-	}, {
-		x_pos: 500,
-		y_pos: 150,
-		size: 100
-	}, {
-		x_pos: 700,
-		y_pos: 50,
-		size: 75
-	}, {
-		x_pos: 900,
-		y_pos: 200,
-		size: 25
-	}, {
-		x_pos: -500,
-		y_pos: 175,
-		size: 120
-	}, {
-		x_pos: 1200,
-		y_pos: 80,
-		size: 90
-	}, {
-		x_pos: 1500,
-		y_pos: 120,
-		size: 134
-	}, {
-		x_pos: 1900,
-		y_pos: 250,
-		size: 40
-	}];
-
-	//initialize mountains
-	mountains = [{
-		x_pos: 75,
-		size: 100
-	}, {
-		x_pos: 150,
-		size: 200
-	}, {
-		x_pos: 750,
-		size: 50
-	}, {
-		x_pos: 1900,
-		size: 900
-	}, {
-		x_pos: -750,
-		size: 250
-	}, {
-		x_pos: 7520,
-		size: 5000
-	}];
-
-	//initialize canyons
-	canyons = [{
-		x_pos: 50,
-		width: 100
-	}, {
-		x_pos: 250,
-		width: 75
-	}, {
-		x_pos: 750,
-		width: 50
-	}, {
-		x_pos: -850,
-		width: 500
-	}, {
-		x_pos: 1750,
-		width: 80
-	}, {
-		x_pos: 7050,
-		width: 5000
-	}];
-
-	//initialize collectables
-	collectables = [{
-		x_pos: 200,
-		y_pos: 400,
-		size: 50
-	}, {
-		x_pos: 400,
-		y_pos: 300,
-		size: 100
-	}, {
-		x_pos: 800,
-		y_pos: 350,
-		size: 75
-	}, {
-		x_pos: 1800,
-		y_pos: 340,
-		size: 75
-	}, {
-		x_pos: -800,
-		y_pos: 350,
-		size: 30
-	}, {
-		x_pos: 900,
-		y_pos: 375,
-		size: 70
-	}, {
-		x_pos: 1000,
-		y_pos: 330,
-		size: 90
-	}, {
-		x_pos: 1200,
-		y_pos: 350,
-		size: 75
-	}, {
-		x_pos: 1300,
-		y_pos: 300,
-		size: 10
-	}, {
-		x_pos: 1600,
-		y_pos: 300,
-		size: 20
-	}];
-
-	//initialize flagpole
-	flagpole = {
-		x_pos: 2000,
-		x_size: 10,
-		y_size: 250,
-		isReached: false
-	};
-
-	//initialize flag
-	flag = {
-		x_size: 80,
-		y_size: 60
-	};
+	// Start game
+	startGame();
 }
 
 function draw() {
@@ -266,6 +121,7 @@ function draw() {
 	//Logic to make the game character plummet.
 	if (isPlummeting) {
 		gameChar_y += 5;
+		checkPlayerDie();
 	}
 
 	// Update real position of gameChar for collision detection.
@@ -280,6 +136,9 @@ function draw() {
 	fill(255);
 	textSize(width / 50);
 	text("SCORE: " + game_score, 20, 25);
+
+	// Display lives at top right of screen
+	displayLives();
 }
 
 
@@ -673,7 +532,205 @@ function renderFlagpole() {
 // Function to check whether the flag pole has been reached
 
 function checkFlagpole() {
-	if(abs(gameChar_world_x - flagpole.x_pos) < 20) {
+	if (abs(gameChar_world_x - flagpole.x_pos) < 20) {
 		flagpole.isReached = true;
+	}
+}
+
+// Function to check whether the player has died
+
+function checkPlayerDie() {
+	if (gameChar_y > height) {
+		lives -= 1;
+		console.log("Lives: " + lives);
+		if (lives > 0) {
+			startGame();
+		}
+	}
+}
+
+// Function to start or restart the game
+
+function startGame() {
+	// Set character position
+	gameChar_x = width / 2;
+	gameChar_y = floorPos_y;
+
+	// Variable to control the background scrolling.
+	scrollPos = 0;
+
+	// Variable to store the real position of the gameChar in the game
+	// world. Needed for collision detection.
+	gameChar_world_x = gameChar_x - scrollPos;
+
+	// Boolean variables to control the movement of the game character.
+	isLeft = false;
+	isRight = false;
+	isFalling = false;
+	isPlummeting = false;
+
+	// Initialise arrays of scenery objects.
+
+	//initialize trees
+	trees_x = [200, 350, 700, 850, 1000, 1150, -150, -300, 1300, 1450, 1600, 1750, 2500, 2650, 3000, 3150];
+
+	//initialize clouds
+	clouds = [{
+		x_pos: 200,
+		y_pos: 50,
+		size: 50
+	}, {
+		x_pos: 500,
+		y_pos: 150,
+		size: 100
+	}, {
+		x_pos: 700,
+		y_pos: 50,
+		size: 75
+	}, {
+		x_pos: 900,
+		y_pos: 200,
+		size: 25
+	}, {
+		x_pos: -500,
+		y_pos: 175,
+		size: 120
+	}, {
+		x_pos: 1200,
+		y_pos: 80,
+		size: 90
+	}, {
+		x_pos: 1500,
+		y_pos: 120,
+		size: 134
+	}, {
+		x_pos: 1900,
+		y_pos: 250,
+		size: 40
+	}];
+
+	//initialize mountains
+	mountains = [{
+		x_pos: 75,
+		size: 100
+	}, {
+		x_pos: 150,
+		size: 200
+	}, {
+		x_pos: 750,
+		size: 50
+	}, {
+		x_pos: 1900,
+		size: 900
+	}, {
+		x_pos: -750,
+		size: 250
+	}, {
+		x_pos: 7520,
+		size: 5000
+	}];
+
+	//initialize canyons
+	canyons = [{
+		x_pos: 50,
+		width: 100
+	}, {
+		x_pos: 250,
+		width: 75
+	}, {
+		x_pos: 750,
+		width: 50
+	}, {
+		x_pos: -850,
+		width: 500
+	}, {
+		x_pos: 1750,
+		width: 80
+	}, {
+		x_pos: 7050,
+		width: 5000
+	}];
+
+	//initialize collectables
+	collectables = [{
+		x_pos: 200,
+		y_pos: 400,
+		size: 50
+	}, {
+		x_pos: 400,
+		y_pos: 300,
+		size: 100
+	}, {
+		x_pos: 800,
+		y_pos: 350,
+		size: 75
+	}, {
+		x_pos: 1800,
+		y_pos: 340,
+		size: 75
+	}, {
+		x_pos: -800,
+		y_pos: 350,
+		size: 30
+	}, {
+		x_pos: 900,
+		y_pos: 375,
+		size: 70
+	}, {
+		x_pos: 1000,
+		y_pos: 330,
+		size: 90
+	}, {
+		x_pos: 1200,
+		y_pos: 350,
+		size: 75
+	}, {
+		x_pos: 1300,
+		y_pos: 300,
+		size: 10
+	}, {
+		x_pos: 1600,
+		y_pos: 300,
+		size: 20
+	}];
+
+	//initialize flagpole
+	flagpole = {
+		x_pos: 2000,
+		x_size: 10,
+		y_size: 250,
+		isReached: false
+	};
+
+	//initialize flag
+	flag = {
+		x_size: 80,
+		y_size: 60
+	};
+}
+// Function to display lives in top right corner of screen.
+
+function displayLives() {
+	for (i = 0; i < lives; i++) {
+		// Initialize variables for positioning lives
+		var lives_x_pos = 20;
+		var lives_y_pos = 75;
+		var lives_x_dist = 35;
+		
+		//draw head
+		fill(235, 152, 181);
+		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 52, 30);
+
+		//draw mouth
+		fill(0);
+		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 44, 5);
+
+		//draw left eye
+		line(width - lives_x_pos - lives_x_dist * i - 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i - 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+
+		//draw right eye
+		line(width - lives_x_pos - lives_x_dist * i + 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i + 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
 	}
 }

@@ -173,7 +173,7 @@ function setup() {
 
 	//initialize flagpole
 	flagpole = {
-		x_pos: 650,
+		x_pos: 2000,
 		x_size: 10,
 		y_size: 250,
 		isReached: false
@@ -270,6 +270,11 @@ function draw() {
 
 	// Update real position of gameChar for collision detection.
 	gameChar_world_x = gameChar_x - scrollPos;
+
+	// Check if flagpole has been reached.
+	if (!flagpole.isReached) {
+		checkFlagpole();
+	}
 
 	// Display score at top left of screen
 	fill(255);
@@ -662,5 +667,13 @@ function renderFlagpole() {
 		rect(flagpole.x_pos + flagpole.x_size, floorPos_y - flag.y_size, flag.x_size, flag.y_size);
 		fill("brown");
 		ellipse(flagpole.x_pos + flagpole.x_size + flag.x_size / 2, floorPos_y - flag.y_size / 2, 20, 20);
+	}
+}
+
+// Function to check whether the flag pole has been reached
+
+function checkFlagpole() {
+	if(abs(gameChar_world_x - flagpole.x_pos) < 20) {
+		flagpole.isReached = true;
 	}
 }

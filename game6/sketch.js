@@ -212,7 +212,9 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7 - 10, gameChar_x + 13, gameChar_y - 7, gameChar_x - 8, gameChar_y - 64);
+		triangle(gameChar_x - 13, gameChar_y - 7 - 10,
+			gameChar_x + 13, gameChar_y - 7,
+			gameChar_x - 8, gameChar_y - 64);
 
 		//feet
 		fill(71, 43, 12);
@@ -247,7 +249,9 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7, gameChar_x + 13, gameChar_y - 7 - 10, gameChar_x + 8, gameChar_y - 64);
+		triangle(gameChar_x - 13, gameChar_y - 7,
+			gameChar_x + 13, gameChar_y - 7 - 10,
+			gameChar_x + 8, gameChar_y - 64);
 
 		//feet
 		fill(71, 43, 12);
@@ -282,7 +286,9 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7 - 10, gameChar_x + 13, gameChar_y - 7, gameChar_x, gameChar_y - 64);
+		triangle(gameChar_x - 13, gameChar_y - 7 - 10,
+			gameChar_x + 13, gameChar_y - 7,
+			gameChar_x, gameChar_y - 64);
 
 		//feet
 		fill(71, 43, 12);
@@ -317,7 +323,9 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7, gameChar_x + 13, gameChar_y - 7 - 10, gameChar_x, gameChar_y - 64);
+		triangle(gameChar_x - 13, gameChar_y - 7,
+			gameChar_x + 13, gameChar_y - 7 - 10,
+			gameChar_x, gameChar_y - 64);
 
 		//feet
 		fill(71, 43, 12);
@@ -352,7 +360,9 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7 - 5, gameChar_x + 13, gameChar_y - 7, gameChar_x, gameChar_y - 64);
+		triangle(gameChar_x - 13, gameChar_y - 7 - 5,
+			gameChar_x + 13, gameChar_y - 7,
+			gameChar_x, gameChar_y - 64);
 
 		//feet	
 		fill(71, 43, 12);
@@ -387,7 +397,9 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7, gameChar_x + 13, gameChar_y - 7, gameChar_x, gameChar_y - 64);
+		triangle(gameChar_x - 13, gameChar_y - 7,
+			gameChar_x + 13, gameChar_y - 7,
+			gameChar_x, gameChar_y - 64);
 
 		//feet
 		fill(71, 43, 12);
@@ -438,14 +450,22 @@ function drawMountains() {
 	//begin mountain drawing
 
 	fill(205, 186, 217);
-	triangle(mountains[i].x_pos + mountains[i].size, floorPos_y - mountains[i].size * 1.76, mountains[i].x_pos + mountains[i].size * 2, floorPos_y, mountains[i].x_pos, floorPos_y);
+	triangle(mountains[i].x_pos + mountains[i].size, floorPos_y - mountains[i].size * 1.76,
+		mountains[i].x_pos + mountains[i].size * 2, floorPos_y,
+		mountains[i].x_pos, floorPos_y);
 	fill(255);
-	triangle(mountains[i].x_pos + mountains[i].size, floorPos_y - mountains[i].size * 1.76, mountains[i].x_pos + mountains[i].size * 1.5, floorPos_y - mountains[i].size * 0.87, mountains[i].x_pos + mountains[i].size * 0.5, floorPos_y - mountains[i].size * 0.87);
+	triangle(mountains[i].x_pos + mountains[i].size, floorPos_y - mountains[i].size * 1.76,
+		mountains[i].x_pos + mountains[i].size * 1.5, floorPos_y - mountains[i].size * 0.87,
+		mountains[i].x_pos + mountains[i].size * 0.5, floorPos_y - mountains[i].size * 0.87);
 
 	fill(205, 186, 217);
-	triangle(mountains[i].x_pos + mountains[i].size * 1.75, floorPos_y - mountains[i].size * 1.32, mountains[i].x_pos + mountains[i].size * 3, floorPos_y, mountains[i].x_pos + mountains[i].size * 0.75, floorPos_y);
+	triangle(mountains[i].x_pos + mountains[i].size * 1.75, floorPos_y - mountains[i].size * 1.32,
+		mountains[i].x_pos + mountains[i].size * 3, floorPos_y,
+		mountains[i].x_pos + mountains[i].size * 0.75, floorPos_y);
 	fill(255);
-	triangle(mountains[i].x_pos + mountains[i].size * 1.75, floorPos_y - mountains[i].size * 1.32, mountains[i].x_pos + mountains[i].size * 2.17, floorPos_y - mountains[i].size * 0.87, mountains[i].x_pos + mountains[i].size * 1.4, floorPos_y - mountains[i].size * 0.87);
+	triangle(mountains[i].x_pos + mountains[i].size * 1.75, floorPos_y - mountains[i].size * 1.32,
+		mountains[i].x_pos + mountains[i].size * 2.17, floorPos_y - mountains[i].size * 0.87,
+		mountains[i].x_pos + mountains[i].size * 1.4, floorPos_y - mountains[i].size * 0.87);
 
 	//end mountain drawing
 }
@@ -483,7 +503,9 @@ function drawCanyon(t_canyon) {
 	fill(33, 10, 6);
 	rect(t_canyon.x_pos, floorPos_y, t_canyon.width, height);
 	fill(240, 36, 0);
-	triangle(t_canyon.x_pos, floorPos_y, t_canyon.x_pos + t_canyon.width, floorPos_y, t_canyon.x_pos + t_canyon.width / 2, height);
+	triangle(t_canyon.x_pos, floorPos_y,
+		t_canyon.x_pos + t_canyon.width, floorPos_y,
+		t_canyon.x_pos + t_canyon.width / 2, height);
 
 	//end canyon drawing
 }
@@ -492,7 +514,9 @@ function drawCanyon(t_canyon) {
 
 function checkCanyon(t_canyon) {
 	//character plummets if canyon is touched
-	if (gameChar_world_x > t_canyon.x_pos && gameChar_world_x < t_canyon.x_pos + t_canyon.width && gameChar_y >= floorPos_y) {
+	if (gameChar_world_x > t_canyon.x_pos &&
+		gameChar_world_x < t_canyon.x_pos + t_canyon.width &&
+		gameChar_y >= floorPos_y) {
 		isPlummeting = true;
 		isRight = false;
 		isLeft = false;
@@ -511,7 +535,8 @@ function drawCollectable(t_collectable) {
 	fill(255, 247, 0);
 	ellipse(t_collectable.x_pos, t_collectable.y_pos, t_collectable.size * 0.5);
 	fill(217, 166, 28);
-	rect(t_collectable.x_pos - t_collectable.size * 0.05, t_collectable.y_pos - t_collectable.size * 0.15, t_collectable.size * 0.1, t_collectable.size * 0.3);
+	rect(t_collectable.x_pos - t_collectable.size * 0.05, t_collectable.y_pos - t_collectable.size * 0.15,
+		t_collectable.size * 0.1, t_collectable.size * 0.3);
 
 	//end collectable drawing
 }
@@ -541,7 +566,8 @@ function renderFlagpole() {
 		fill(0);
 		rect(flagpole.x_pos + flagpole.x_size, floorPos_y - flagpole.y_size, flag.x_size, flag.y_size);
 		fill("brown");
-		ellipse(flagpole.x_pos + flagpole.x_size + flag.x_size / 2, floorPos_y - flagpole.y_size + flag.y_size / 2, 40, 40);
+		ellipse(flagpole.x_pos + flagpole.x_size + flag.x_size / 2,
+			floorPos_y - flagpole.y_size + flag.y_size / 2, 40, 40);
 	}
 	//draw the flag in down position before it's reached
 	else {
@@ -590,12 +616,16 @@ function displayLives() {
 		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 44, 5);
 
 		//draw left eye
-		line(width - lives_x_pos - lives_x_dist * i - 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
-		line(width - lives_x_pos - lives_x_dist * i - 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i - 10, lives_y_pos - 52,
+			width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i - 4, lives_y_pos - 52,
+			width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
 
 		//draw right eye
-		line(width - lives_x_pos - lives_x_dist * i + 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
-		line(width - lives_x_pos - lives_x_dist * i + 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i + 10, lives_y_pos - 52,
+			width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i + 4, lives_y_pos - 52,
+			width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
 	}
 }
 
@@ -626,7 +656,8 @@ function startGame() {
 	// Initialise arrays of scenery objects.
 
 	//initialize trees
-	trees_x = [200, 350, 700, 850, 1000, 1150, -150, -300, 1300, 1450, 1600, 1750, 2500, 2650, 3000, 3150];
+	trees_x = [200, 350, 700, 850, 1000, 1150, -150, -300,
+		1300, 1450, 1600, 1750, 2500, 2650, 3000, 3150];
 
 	//initialize clouds
 	clouds = [{

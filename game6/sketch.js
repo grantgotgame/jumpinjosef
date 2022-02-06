@@ -1,6 +1,6 @@
 /*
 
-The Game Project 5 - Bring it all together
+The Game Project 6 - Let's end this
 
 */
 
@@ -193,6 +193,7 @@ function keyReleased() {
 // ------------------------------
 
 // Function to draw the game character.
+
 function drawGameChar() {
 
 	// jumping-left code
@@ -411,6 +412,7 @@ function drawGameChar() {
 // ---------------------------
 
 // Function to draw cloud objects.
+
 function drawClouds() {
 	//begin cloud drawing
 
@@ -423,6 +425,7 @@ function drawClouds() {
 }
 
 // Function to draw mountains objects.
+
 function drawMountains() {
 	//begin mountain drawing
 
@@ -440,6 +443,7 @@ function drawMountains() {
 }
 
 // Function to draw trees objects.
+
 function drawTrees() {
 	//begin tree drawing
 
@@ -464,6 +468,7 @@ function drawTrees() {
 // ---------------------------------
 
 // Function to draw canyon objects.
+
 function drawCanyon(t_canyon) {
 	//begin canyon drawing
 
@@ -476,10 +481,13 @@ function drawCanyon(t_canyon) {
 }
 
 // Function to check character is over a canyon.
+
 function checkCanyon(t_canyon) {
 	//character plummets if canyon is touched
 	if (gameChar_world_x > t_canyon.x_pos && gameChar_world_x < t_canyon.x_pos + t_canyon.width && gameChar_y >= floorPos_y) {
 		isPlummeting = true;
+		isRight = false;
+		isLeft = false;
 	}
 }
 
@@ -488,6 +496,7 @@ function checkCanyon(t_canyon) {
 // ----------------------------------
 
 // Function to draw collectable objects.
+
 function drawCollectable(t_collectable) {
 	//begin collectable drawing
 
@@ -500,6 +509,7 @@ function drawCollectable(t_collectable) {
 }
 
 // Function to check character has collected an item.
+
 function checkCollectable(t_collectable) {
 	//gather collectable when touched
 	if (dist(gameChar_world_x, gameChar_y - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
@@ -513,6 +523,7 @@ function checkCollectable(t_collectable) {
 // ----------------------------------
 
 // Function to draw the flag pole.
+
 function renderFlagpole() {
 	//draw the pole
 	fill(100);
@@ -534,6 +545,7 @@ function renderFlagpole() {
 }
 
 // Function to check whether the flag pole has been reached.
+
 function checkFlagpole() {
 	if (abs(gameChar_world_x - flagpole.x_pos) < 20) {
 		flagpole.isReached = true;
@@ -545,6 +557,7 @@ function checkFlagpole() {
 // ----------------------------------
 
 // Function to display score in top left corner of screen.
+
 function displayScore() {
 	fill(255);
 	textSize(width / 50);
@@ -552,6 +565,7 @@ function displayScore() {
 }
 
 // Function to display lives in top right corner of screen.
+
 function displayLives() {
 	for (i = 0; i < lives; i++) {
 		// Initialize variables for positioning lives
@@ -578,20 +592,11 @@ function displayLives() {
 }
 
 // ----------------------------------
-// Game start and end functions
+// Game start and restart function
 // ----------------------------------
 
-// Function to check whether the player has died.
-function checkPlayerDie() {
-	if (gameChar_y > height) {
-		lives -= 1;
-		if (lives > 0) {
-			startGame();
-		}
-	}
-}
-
 // Function to start or restart the game.
+
 function startGame() {
 	// Set character position
 	gameChar_x = width / 2;
@@ -750,7 +755,23 @@ function startGame() {
 	};
 }
 
+// ----------------------------------
+// Game end functions
+// ----------------------------------
+
+// Function to check whether the player has died.
+
+function checkPlayerDie() {
+	if (gameChar_y > height) {
+		lives -= 1;
+		if (lives > 0) {
+			startGame();
+		}
+	}
+}
+
 // Function to end the game when the player runs out of lives.
+
 function noLives() {
 	fill(255);
 	stroke(0);
@@ -759,6 +780,7 @@ function noLives() {
 }
 
 // Function to end the game when the flagpole is reached.
+
 function flagpoleReached() {
 	fill(255);
 	stroke(0);

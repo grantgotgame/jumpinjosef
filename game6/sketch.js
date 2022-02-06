@@ -22,6 +22,8 @@ var isRight;
 var isFalling;
 var isPlummeting;
 
+var game_score = 0;
+
 function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
@@ -249,6 +251,11 @@ function draw() {
 
 	// Update real position of gameChar for collision detection.
 	gameChar_world_x = gameChar_x - scrollPos;
+
+	// Display score at top left of screen
+	fill(255);
+	textSize(width / 50);
+	text("SCORE: " + game_score, 20, 25);
 }
 
 
@@ -613,5 +620,6 @@ function checkCollectable(t_collectable) {
 	//gather collectable when touched
 	if (dist(gameChar_world_x, gameChar_y - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
 		t_collectable.isFound = true;
+		game_score += 1;
 	}
 }

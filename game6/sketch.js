@@ -86,8 +86,19 @@ function draw() {
 
 	pop(); //end background scroll
 
-	// Draw game character.
+	// Logic to end the game when lives are exhausted
+	if (lives < 1) {
+		noLives();
+		return (0);
+	}
 
+	// Logic to end the game when the flagpole is reached
+	if (flagpole.isReached) {
+		flagpoleReached();
+		return (1);
+	}
+
+	// Draw game character.
 	drawGameChar();
 
 	// Logic to make the game character move or the background scroll.
@@ -133,9 +144,7 @@ function draw() {
 	}
 
 	// Display score at top left of screen
-	fill(255);
-	textSize(width / 50);
-	text("SCORE: " + game_score, 20, 25);
+	displayScore();
 
 	// Display lives at top right of screen
 	displayLives();
@@ -184,7 +193,6 @@ function keyReleased() {
 // ------------------------------
 
 // Function to draw the game character.
-
 function drawGameChar() {
 
 	// jumping-left code
@@ -403,7 +411,6 @@ function drawGameChar() {
 // ---------------------------
 
 // Function to draw cloud objects.
-
 function drawClouds() {
 	//begin cloud drawing
 
@@ -416,7 +423,6 @@ function drawClouds() {
 }
 
 // Function to draw mountains objects.
-
 function drawMountains() {
 	//begin mountain drawing
 
@@ -434,7 +440,6 @@ function drawMountains() {
 }
 
 // Function to draw trees objects.
-
 function drawTrees() {
 	//begin tree drawing
 
@@ -459,7 +464,6 @@ function drawTrees() {
 // ---------------------------------
 
 // Function to draw canyon objects.
-
 function drawCanyon(t_canyon) {
 	//begin canyon drawing
 
@@ -472,7 +476,6 @@ function drawCanyon(t_canyon) {
 }
 
 // Function to check character is over a canyon.
-
 function checkCanyon(t_canyon) {
 	//character plummets if canyon is touched
 	if (gameChar_world_x > t_canyon.x_pos && gameChar_world_x < t_canyon.x_pos + t_canyon.width && gameChar_y >= floorPos_y) {
@@ -485,7 +488,6 @@ function checkCanyon(t_canyon) {
 // ----------------------------------
 
 // Function to draw collectable objects.
-
 function drawCollectable(t_collectable) {
 	//begin collectable drawing
 
@@ -498,7 +500,6 @@ function drawCollectable(t_collectable) {
 }
 
 // Function to check character has collected an item.
-
 function checkCollectable(t_collectable) {
 	//gather collectable when touched
 	if (dist(gameChar_world_x, gameChar_y - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
@@ -507,8 +508,11 @@ function checkCollectable(t_collectable) {
 	}
 }
 
-// Function to draw the flag pole
+// ----------------------------------
+// Flagpole render and check functions
+// ----------------------------------
 
+// Function to draw the flag pole.
 function renderFlagpole() {
 	//draw the pole
 	fill(100);
@@ -529,28 +533,65 @@ function renderFlagpole() {
 	}
 }
 
-// Function to check whether the flag pole has been reached
-
+// Function to check whether the flag pole has been reached.
 function checkFlagpole() {
 	if (abs(gameChar_world_x - flagpole.x_pos) < 20) {
 		flagpole.isReached = true;
 	}
 }
 
-// Function to check whether the player has died
+// ----------------------------------
+// Score and lives display functions
+// ----------------------------------
 
+// Function to display score in top left corner of screen.
+function displayScore() {
+	fill(255);
+	textSize(width / 50);
+	text("SCORE: " + game_score, 20, 25);
+}
+
+// Function to display lives in top right corner of screen.
+function displayLives() {
+	for (i = 0; i < lives; i++) {
+		// Initialize variables for positioning lives
+		var lives_x_pos = 20;
+		var lives_y_pos = 75;
+		var lives_x_dist = 35;
+
+		//draw head
+		fill(235, 152, 181);
+		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 52, 30);
+
+		//draw mouth
+		fill(0);
+		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 44, 5);
+
+		//draw left eye
+		line(width - lives_x_pos - lives_x_dist * i - 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i - 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+
+		//draw right eye
+		line(width - lives_x_pos - lives_x_dist * i + 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+		line(width - lives_x_pos - lives_x_dist * i + 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+	}
+}
+
+// ----------------------------------
+// Game start and end functions
+// ----------------------------------
+
+// Function to check whether the player has died.
 function checkPlayerDie() {
 	if (gameChar_y > height) {
 		lives -= 1;
-		console.log("Lives: " + lives);
 		if (lives > 0) {
 			startGame();
 		}
 	}
 }
 
-// Function to start or restart the game
-
+// Function to start or restart the game.
 function startGame() {
 	// Set character position
 	gameChar_x = width / 2;
@@ -644,7 +685,7 @@ function startGame() {
 		x_pos: -850,
 		width: 500
 	}, {
-		x_pos: 1750,
+		x_pos: 1670,
 		width: 80
 	}, {
 		x_pos: 7050,
@@ -708,29 +749,19 @@ function startGame() {
 		y_size: 60
 	};
 }
-// Function to display lives in top right corner of screen.
 
-function displayLives() {
-	for (i = 0; i < lives; i++) {
-		// Initialize variables for positioning lives
-		var lives_x_pos = 20;
-		var lives_y_pos = 75;
-		var lives_x_dist = 35;
-		
-		//draw head
-		fill(235, 152, 181);
-		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 52, 30);
+// Function to end the game when the player runs out of lives.
+function noLives() {
+	fill(255);
+	stroke(0);
+	textSize(width / 25);
+	text("Game over. Press space to continue.", width / 6, height / 2);
+}
 
-		//draw mouth
-		fill(0);
-		ellipse(width - lives_x_pos - lives_x_dist * i, lives_y_pos - 44, 5);
-
-		//draw left eye
-		line(width - lives_x_pos - lives_x_dist * i - 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
-		line(width - lives_x_pos - lives_x_dist * i - 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
-
-		//draw right eye
-		line(width - lives_x_pos - lives_x_dist * i + 10, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
-		line(width - lives_x_pos - lives_x_dist * i + 4, lives_y_pos - 52, width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
-	}
+// Function to end the game when the flagpole is reached.
+function flagpoleReached() {
+	fill(255);
+	stroke(0);
+	textSize(width / 25);
+	text("Level complete. Press space to continue.", width / 7, height / 2);
 }

@@ -9,6 +9,8 @@ var mountains;
 var trees_x;
 var canyons;
 var collectables;
+var flagpole;
+var flag;
 
 var gameChar_x;
 var gameChar_y;
@@ -168,6 +170,20 @@ function setup() {
 		y_pos: 300,
 		size: 20
 	}];
+
+	//initialize flagpole
+	flagpole = {
+		x_pos: 650,
+		x_size: 10,
+		y_size: 250,
+		isReached: false
+	};
+
+	//initialize flag
+	flag = {
+		x_size: 80,
+		y_size: 60
+	};
 }
 
 function draw() {
@@ -209,6 +225,9 @@ function draw() {
 			checkCollectable(collectables[i]); //check for collisions
 		}
 	}
+
+	// Draw flagpole.
+	renderFlagpole();
 
 	pop(); //end background scroll
 
@@ -621,5 +640,27 @@ function checkCollectable(t_collectable) {
 	if (dist(gameChar_world_x, gameChar_y - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
 		t_collectable.isFound = true;
 		game_score += 1;
+	}
+}
+
+// Function to draw the flag pole
+
+function renderFlagpole() {
+	//draw the pole
+	fill(100);
+	rect(flagpole.x_pos, floorPos_y, flagpole.x_size, -flagpole.y_size);
+	//draw the flag in up position when it's reached
+	if (flagpole.isReached) {
+		fill(0);
+		rect(flagpole.x_pos + flagpole.x_size, floorPos_y - flagpole.y_size, flag.x_size, flag.y_size);
+		fill("brown");
+		ellipse(flagpole.x_pos + flagpole.x_size + flag.x_size / 2, floorPos_y - flagpole.y_size + flag.y_size / 2, 40, 40);
+	}
+	//draw the flag in down position before it's reached
+	else {
+		fill(0);
+		rect(flagpole.x_pos + flagpole.x_size, floorPos_y - flag.y_size, flag.x_size, flag.y_size);
+		fill("brown");
+		ellipse(flagpole.x_pos + flagpole.x_size + flag.x_size / 2, floorPos_y - flag.y_size / 2, 20, 20);
 	}
 }

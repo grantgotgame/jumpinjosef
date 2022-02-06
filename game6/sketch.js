@@ -26,6 +26,7 @@ var isPlummeting;
 
 var game_score;
 var lives;
+var gameOver;
 
 function setup() {
 	// Create environment
@@ -38,6 +39,7 @@ function setup() {
 	lives = 3;
 
 	// Start game
+	gameOver = false;
 	startGame();
 }
 
@@ -170,6 +172,12 @@ function keyPressed() {
 
 	if (keyCode == 32 && gameChar_y == floorPos_y) {
 		gameChar_y -= 100;
+	}
+
+	// if statement to restart the game after a game over when
+	// spacebar is pressed
+	if (gameOver && keyCode == 32) {
+		setup();
 	}
 }
 
@@ -777,6 +785,7 @@ function noLives() {
 	stroke(0);
 	textSize(width / 25);
 	text("Game over. Press space to continue.", width / 6, height / 2);
+	gameOver = true;
 }
 
 // Function to end the game when the flagpole is reached.
@@ -786,4 +795,5 @@ function flagpoleReached() {
 	stroke(0);
 	textSize(width / 25);
 	text("Level complete. Press space to continue.", width / 7, height / 2);
+	gameOver = true;
 }

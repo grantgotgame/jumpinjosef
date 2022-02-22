@@ -13,8 +13,8 @@ function preload() {
     soundFormats('mp3', 'wav');
 
     //load your sounds here
-    jumpSound = new Audio('assets/jump.wav');
-    jumpSound.volume = 0.1;
+    jumpSound = new Audio('assets/jump3.mp3');
+    jumpSound.volume = 0.5;
 }
 
 /*

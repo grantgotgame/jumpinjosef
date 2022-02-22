@@ -18,7 +18,6 @@ function preload()
     jumpSound.setVolume(0.1);
 }
 
-
 /*
 
 Game Project 7 - Make it awesome!
@@ -65,10 +64,10 @@ function setup() {
 }
 
 function draw() {
-	background(100, 155, 255); // fill the sky blue
+	background("LightSkyBlue"); // fill the sky blue
 
 	noStroke();
-	fill(0, 155, 0);
+	fill("Green");
 	rect(0, floorPos_y, width, height / 4); // draw some green ground
 
 	//begin background scroll
@@ -825,6 +824,7 @@ function startGame() {
 function checkPlayerDie() {
 	if (gameChar_y > height) {
 		lives -= 1;
+        game_score = 0;
 		if (lives > 0) {
 			startGame();
 		}

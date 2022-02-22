@@ -32,11 +32,8 @@ var collectables;
 var flagpole;
 var flag;
 
-var gameChar_x;
-var gameChar_y;
 var floorPos_y;
 var scrollPos;
-var gameChar_world_x;
 var treePos_y;
 
 var isLeft;
@@ -47,6 +44,12 @@ var isPlummeting;
 var game_score;
 var lives;
 var gameOver;
+
+var gameChar = {
+    x_pos: 0, //positions are set in startGame()
+    world_x_pos: 0,
+    y_pos: 0
+};
 
 function setup() {
 	// Create environment
@@ -125,8 +128,8 @@ function draw() {
 
 	// Logic to make the game character move or the background scroll.
 	if (isLeft) {
-		if (gameChar_x > width * 0.2) {
-			gameChar_x -= 5;
+		if (gameChar.x_pos > width * 0.2) {
+			gameChar.x_pos -= 5;
 		}
 		else {
 			scrollPos += 5;
@@ -134,8 +137,8 @@ function draw() {
 	}
 
 	if (isRight) {
-		if (gameChar_x < width * 0.8) {
-			gameChar_x += 5;
+		if (gameChar.x_pos < width * 0.8) {
+			gameChar.x_pos += 5;
 		}
 		else {
 			scrollPos -= 5; // negative for moving against the background
@@ -143,8 +146,8 @@ function draw() {
 	}
 
 	// Logic to make the game character rise and fall.
-	if (gameChar_y < floorPos_y) {
-		gameChar_y += 2;
+	if (gameChar.y_pos < floorPos_y) {
+		gameChar.y_pos += 2;
 		isFalling = true;
 	}
 	else {
@@ -153,12 +156,12 @@ function draw() {
 
 	//Logic to make the game character plummet.
 	if (isPlummeting) {
-		gameChar_y += 5;
+		gameChar.y_pos += 5;
 		checkPlayerDie();
 	}
 
 	// Update real position of gameChar for collision detection.
-	gameChar_world_x = gameChar_x - scrollPos;
+	gameChar.world_x_pos = gameChar.x_pos - scrollPos;
 
 	// Check if flagpole has been reached.
 	if (!flagpole.isReached) {
@@ -190,8 +193,8 @@ function keyPressed() {
 		isRight = true;
 	}
 
-	if (keyCode == 32 && gameChar_y == floorPos_y) {
-		gameChar_y -= 100;
+	if (keyCode == 32 && gameChar.y_pos == floorPos_y) {
+		gameChar.y_pos -= 100;
         jumpSound.play();
 	}
 
@@ -233,30 +236,30 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7 - 10,
-			gameChar_x + 13, gameChar_y - 7,
-			gameChar_x - 8, gameChar_y - 64);
+		triangle(gameChar.x_pos - 13, gameChar.y_pos - 7 - 10,
+			gameChar.x_pos + 13, gameChar.y_pos - 7,
+			gameChar.x_pos - 8, gameChar.y_pos - 64);
 
 		//feet
 		fill(71, 43, 12);
-		ellipse(gameChar_x - 13, gameChar_y - 7 - 10, 20); //left
-		ellipse(gameChar_x + 13, gameChar_y - 7, 20); //right
+		ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7 - 10, 20); //left
+		ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7, 20); //right
 
 		//head
 		fill(235, 152, 181);
-		ellipse(gameChar_x - 8, gameChar_y - 52, 30);
+		ellipse(gameChar.x_pos - 8, gameChar.y_pos - 52, 30);
 
 		//mouth
 		fill(0);
-		ellipse(gameChar_x - 8, gameChar_y - 44, 5 - 4);
+		ellipse(gameChar.x_pos - 8, gameChar.y_pos - 44, 5 - 4);
 
 		//left eye
-		line(gameChar_x - 8 - 10 + 6, gameChar_y - 52 - 6, gameChar_x - 8 - 7, gameChar_y - 55);
-		line(gameChar_x - 8 - 4, gameChar_y - 52, gameChar_x - 8 - 7, gameChar_y - 55);
+		line(gameChar.x_pos - 8 - 10 + 6, gameChar.y_pos - 52 - 6, gameChar.x_pos - 8 - 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos - 8 - 4, gameChar.y_pos - 52, gameChar.x_pos - 8 - 7, gameChar.y_pos - 55);
 
 		//right eye
-		line(gameChar_x - 8 + 10, gameChar_y - 52, gameChar_x - 8 + 7, gameChar_y - 55);
-		line(gameChar_x - 8 + 4 + 6, gameChar_y - 52 - 6, gameChar_x - 8 + 7, gameChar_y - 55);
+		line(gameChar.x_pos - 8 + 10, gameChar.y_pos - 52, gameChar.x_pos - 8 + 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos - 8 + 4 + 6, gameChar.y_pos - 52 - 6, gameChar.x_pos - 8 + 7, gameChar.y_pos - 55);
 
 		//end character drawing
 
@@ -270,30 +273,30 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7,
-			gameChar_x + 13, gameChar_y - 7 - 10,
-			gameChar_x + 8, gameChar_y - 64);
+		triangle(gameChar.x_pos - 13, gameChar.y_pos - 7,
+			gameChar.x_pos + 13, gameChar.y_pos - 7 - 10,
+			gameChar.x_pos + 8, gameChar.y_pos - 64);
 
 		//feet
 		fill(71, 43, 12);
-		ellipse(gameChar_x - 13, gameChar_y - 7, 20); //left
-		ellipse(gameChar_x + 13, gameChar_y - 7 - 10, 20); //right
+		ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7, 20); //left
+		ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7 - 10, 20); //right
 
 		//head
 		fill(235, 152, 181);
-		ellipse(gameChar_x + 8, gameChar_y - 52, 30);
+		ellipse(gameChar.x_pos + 8, gameChar.y_pos - 52, 30);
 
 		//mouth
 		fill(0);
-		ellipse(gameChar_x + 8, gameChar_y - 44, 5 - 4);
+		ellipse(gameChar.x_pos + 8, gameChar.y_pos - 44, 5 - 4);
 
 		//left eye
-		line(gameChar_x + 8 - 10, gameChar_y - 52, gameChar_x + 8 - 7, gameChar_y - 55);
-		line(gameChar_x + 8 - 4 - 6, gameChar_y - 52 - 6, gameChar_x + 8 - 7, gameChar_y - 55);
+		line(gameChar.x_pos + 8 - 10, gameChar.y_pos - 52, gameChar.x_pos + 8 - 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos + 8 - 4 - 6, gameChar.y_pos - 52 - 6, gameChar.x_pos + 8 - 7, gameChar.y_pos - 55);
 
 		//right eye
-		line(gameChar_x + 8 + 10 - 6, gameChar_y - 52 - 6, gameChar_x + 8 + 7, gameChar_y - 55);
-		line(gameChar_x + 8 + 4, gameChar_y - 52, gameChar_x + 8 + 7, gameChar_y - 55);
+		line(gameChar.x_pos + 8 + 10 - 6, gameChar.y_pos - 52 - 6, gameChar.x_pos + 8 + 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos + 8 + 4, gameChar.y_pos - 52, gameChar.x_pos + 8 + 7, gameChar.y_pos - 55);
 
 		//end character drawing
 
@@ -307,30 +310,30 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7 - 10,
-			gameChar_x + 13, gameChar_y - 7,
-			gameChar_x, gameChar_y - 64);
+		triangle(gameChar.x_pos - 13, gameChar.y_pos - 7 - 10,
+			gameChar.x_pos + 13, gameChar.y_pos - 7,
+			gameChar.x_pos, gameChar.y_pos - 64);
 
 		//feet
 		fill(71, 43, 12);
-		ellipse(gameChar_x - 13, gameChar_y - 7 - 10, 20); //left
-		ellipse(gameChar_x + 13, gameChar_y - 7, 20); //right
+		ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7 - 10, 20); //left
+		ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7, 20); //right
 
 		//head
 		fill(235, 152, 181);
-		ellipse(gameChar_x, gameChar_y - 52, 30);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 52, 30);
 
 		//mouth
 		fill(0);
-		ellipse(gameChar_x, gameChar_y - 44, 5 - 2);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 44, 5 - 2);
 
 		//left eye
-		line(gameChar_x - 10 + 6, gameChar_y - 52 - 6, gameChar_x - 7, gameChar_y - 55);
-		line(gameChar_x - 4, gameChar_y - 52, gameChar_x - 7, gameChar_y - 55);
+		line(gameChar.x_pos - 10 + 6, gameChar.y_pos - 52 - 6, gameChar.x_pos - 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos - 4, gameChar.y_pos - 52, gameChar.x_pos - 7, gameChar.y_pos - 55);
 
 		//right eye
-		line(gameChar_x + 10, gameChar_y - 52, gameChar_x + 7, gameChar_y - 55);
-		line(gameChar_x + 4 + 6, gameChar_y - 52 - 6, gameChar_x + 7, gameChar_y - 55);
+		line(gameChar.x_pos + 10, gameChar.y_pos - 52, gameChar.x_pos + 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos + 4 + 6, gameChar.y_pos - 52 - 6, gameChar.x_pos + 7, gameChar.y_pos - 55);
 
 		//end character drawing
 
@@ -344,30 +347,30 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7,
-			gameChar_x + 13, gameChar_y - 7 - 10,
-			gameChar_x, gameChar_y - 64);
+		triangle(gameChar.x_pos - 13, gameChar.y_pos - 7,
+			gameChar.x_pos + 13, gameChar.y_pos - 7 - 10,
+			gameChar.x_pos, gameChar.y_pos - 64);
 
 		//feet
 		fill(71, 43, 12);
-		ellipse(gameChar_x - 13, gameChar_y - 7, 20); //left
-		ellipse(gameChar_x + 13, gameChar_y - 7 - 10, 20); //right
+		ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7, 20); //left
+		ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7 - 10, 20); //right
 
 		//head
 		fill(235, 152, 181);
-		ellipse(gameChar_x, gameChar_y - 52, 30);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 52, 30);
 
 		//mouth
 		fill(0);
-		ellipse(gameChar_x, gameChar_y - 44, 5 - 2);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 44, 5 - 2);
 
 		//left eye
-		line(gameChar_x - 10, gameChar_y - 52, gameChar_x - 7, gameChar_y - 55);
-		line(gameChar_x - 4 - 6, gameChar_y - 52 - 6, gameChar_x - 7, gameChar_y - 55);
+		line(gameChar.x_pos - 10, gameChar.y_pos - 52, gameChar.x_pos - 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos - 4 - 6, gameChar.y_pos - 52 - 6, gameChar.x_pos - 7, gameChar.y_pos - 55);
 
 		//right eye
-		line(gameChar_x + 10 - 6, gameChar_y - 52 - 6, gameChar_x + 7, gameChar_y - 55);
-		line(gameChar_x + 4, gameChar_y - 52, gameChar_x + 7, gameChar_y - 55);
+		line(gameChar.x_pos + 10 - 6, gameChar.y_pos - 52 - 6, gameChar.x_pos + 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos + 4, gameChar.y_pos - 52, gameChar.x_pos + 7, gameChar.y_pos - 55);
 
 		//end character drawing
 
@@ -381,30 +384,30 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7 - 5,
-			gameChar_x + 13, gameChar_y - 7,
-			gameChar_x, gameChar_y - 64);
+		triangle(gameChar.x_pos - 13, gameChar.y_pos - 7 - 5,
+			gameChar.x_pos + 13, gameChar.y_pos - 7,
+			gameChar.x_pos, gameChar.y_pos - 64);
 
 		//feet	
 		fill(71, 43, 12);
-		ellipse(gameChar_x - 13, gameChar_y - 7 - 5, 20); //left
-		ellipse(gameChar_x + 13, gameChar_y - 7, 20); //right
+		ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7 - 5, 20); //left
+		ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7, 20); //right
 
 		//head
 		fill(235, 152, 181);
-		ellipse(gameChar_x, gameChar_y - 52, 30);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 52, 30);
 
 		//mouth
 		fill(0);
-		ellipse(gameChar_x, gameChar_y - 44, 5 - 4);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 44, 5 - 4);
 
 		//left eye
-		line(gameChar_x - 10, gameChar_y - 6 - 52, gameChar_x - 7, gameChar_y - 55);
-		line(gameChar_x - 4, gameChar_y - 6 - 52, gameChar_x - 7, gameChar_y - 55);
+		line(gameChar.x_pos - 10, gameChar.y_pos - 6 - 52, gameChar.x_pos - 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos - 4, gameChar.y_pos - 6 - 52, gameChar.x_pos - 7, gameChar.y_pos - 55);
 
 		//right eye
-		line(gameChar_x + 10, gameChar_y - 6 - 52, gameChar_x + 7, gameChar_y - 55);
-		line(gameChar_x + 4, gameChar_y - 6 - 52, gameChar_x + 7, gameChar_y - 55);
+		line(gameChar.x_pos + 10, gameChar.y_pos - 6 - 52, gameChar.x_pos + 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos + 4, gameChar.y_pos - 6 - 52, gameChar.x_pos + 7, gameChar.y_pos - 55);
 
 		//end character drawing
 
@@ -418,30 +421,30 @@ function drawGameChar() {
 		//body
 		stroke(0);
 		fill(153, 51, 47);
-		triangle(gameChar_x - 13, gameChar_y - 7,
-			gameChar_x + 13, gameChar_y - 7,
-			gameChar_x, gameChar_y - 64);
+		triangle(gameChar.x_pos - 13, gameChar.y_pos - 7,
+			gameChar.x_pos + 13, gameChar.y_pos - 7,
+			gameChar.x_pos, gameChar.y_pos - 64);
 
 		//feet
 		fill(71, 43, 12);
-		ellipse(gameChar_x - 13, gameChar_y - 7, 20); //left
-		ellipse(gameChar_x + 13, gameChar_y - 7, 20); //right
+		ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7, 20); //left
+		ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7, 20); //right
 
 		//head
 		fill(235, 152, 181);
-		ellipse(gameChar_x, gameChar_y - 52, 30);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 52, 30);
 
 		//mouth
 		fill(0);
-		ellipse(gameChar_x, gameChar_y - 44, 5);
+		ellipse(gameChar.x_pos, gameChar.y_pos - 44, 5);
 
 		//left eye
-		line(gameChar_x - 10, gameChar_y - 52, gameChar_x - 7, gameChar_y - 55);
-		line(gameChar_x - 4, gameChar_y - 52, gameChar_x - 7, gameChar_y - 55);
+		line(gameChar.x_pos - 10, gameChar.y_pos - 52, gameChar.x_pos - 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos - 4, gameChar.y_pos - 52, gameChar.x_pos - 7, gameChar.y_pos - 55);
 
 		//right eye
-		line(gameChar_x + 10, gameChar_y - 52, gameChar_x + 7, gameChar_y - 55);
-		line(gameChar_x + 4, gameChar_y - 52, gameChar_x + 7, gameChar_y - 55);
+		line(gameChar.x_pos + 10, gameChar.y_pos - 52, gameChar.x_pos + 7, gameChar.y_pos - 55);
+		line(gameChar.x_pos + 4, gameChar.y_pos - 52, gameChar.x_pos + 7, gameChar.y_pos - 55);
 
 		//end character drawing
 
@@ -535,9 +538,9 @@ function drawCanyon(t_canyon) {
 
 function checkCanyon(t_canyon) {
 	//character plummets if canyon is touched
-	if (gameChar_world_x > t_canyon.x_pos &&
-		gameChar_world_x < t_canyon.x_pos + t_canyon.width &&
-		gameChar_y >= floorPos_y) {
+	if (gameChar.world_x_pos > t_canyon.x_pos &&
+		gameChar.world_x_pos < t_canyon.x_pos + t_canyon.width &&
+		gameChar.y_pos >= floorPos_y) {
 		isPlummeting = true;
 		isRight = false;
 		isLeft = false;
@@ -566,7 +569,7 @@ function drawCollectable(t_collectable) {
 
 function checkCollectable(t_collectable) {
 	//gather collectable when touched
-	if (dist(gameChar_world_x, gameChar_y - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
+	if (dist(gameChar.world_x_pos, gameChar.y_pos - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
 		t_collectable.isFound = true;
 		game_score += 1;
 	}
@@ -602,7 +605,7 @@ function renderFlagpole() {
 // Function to check whether the flag pole has been reached.
 
 function checkFlagpole() {
-	if (abs(gameChar_world_x - flagpole.x_pos) < 20) {
+	if (abs(gameChar.world_x_pos - flagpole.x_pos) < 20) {
 		flagpole.isReached = true;
 	}
 }
@@ -658,15 +661,15 @@ function displayLives() {
 
 function startGame() {
 	// Set character position
-	gameChar_x = width / 2;
-	gameChar_y = floorPos_y;
+	gameChar.x_pos = width / 2;
+	gameChar.y_pos = floorPos_y;
 
 	// Variable to control the background scrolling.
 	scrollPos = 0;
 
 	// Variable to store the real position of the gameChar in the game
 	// world. Needed for collision detection.
-	gameChar_world_x = gameChar_x - scrollPos;
+	gameChar.world_x_pos = gameChar.x_pos - scrollPos;
 
 	// Boolean variables to control the movement of the game character.
 	isLeft = false;
@@ -822,7 +825,7 @@ function startGame() {
 // Function to check whether the player has died.
 
 function checkPlayerDie() {
-	if (gameChar_y > height) {
+	if (gameChar.y_pos > height) {
 		lives -= 1;
         game_score = 0;
 		if (lives > 0) {

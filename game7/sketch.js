@@ -590,7 +590,7 @@ function checkCollectable(t_collectable) {
     //gather collectable when touched
     if (dist(gameChar.world_x_pos, gameChar.y_pos - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
         t_collectable.isFound = true;
-        game_score += 1;
+        game_score += ceil(t_collectable.size/50);
         collectSound.play();
     }
 }
@@ -784,7 +784,7 @@ function startGame() {
         width: 5000
     }];
 
-    //initialize collectables
+    //initialize collectables (set to 50 or 100 for best results)
     collectables = [{
         x_pos: 200,
         y_pos: 400,
@@ -796,35 +796,35 @@ function startGame() {
     }, {
         x_pos: 800,
         y_pos: 350,
-        size: 75
+        size: 50
     }, {
         x_pos: 1800,
         y_pos: 340,
-        size: 75
+        size: 50
     }, {
         x_pos: -800,
         y_pos: 350,
-        size: 30
+        size: 50
     }, {
         x_pos: 900,
         y_pos: 375,
-        size: 70
+        size: 100
     }, {
-        x_pos: 1000,
+        x_pos: -500,
         y_pos: 330,
-        size: 90
+        size: 100
     }, {
         x_pos: 1200,
         y_pos: 350,
-        size: 75
+        size: 50
     }, {
         x_pos: 1300,
         y_pos: 300,
-        size: 10
+        size: 50
     }, {
         x_pos: 1600,
         y_pos: 300,
-        size: 20
+        size: 50
     }];
 
     //initialize flagpole

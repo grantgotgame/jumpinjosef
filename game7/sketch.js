@@ -70,8 +70,7 @@ function setup() {
     floorPos_y = height * 3 / 4;
     treePos_y = floorPos_y - 250;
 
-    // Initialize score and lives
-    game_score = 0;
+    // Initialize lives
     lives = 3;
 
     // Start game
@@ -681,6 +680,9 @@ function displayLives() {
 // Function to start or restart the game.
 
 function startGame() {
+    // Reset score
+    game_score = lives * 10;
+
     // Set character position
     gameChar.x_pos = width / 2;
     gameChar.y_pos = floorPos_y;
@@ -848,7 +850,6 @@ function startGame() {
 function checkPlayerDie() {
     if (gameChar.y_pos > height) {
         lives -= 1;
-        game_score = 0;
         if (lives > 0) {
             startGame();
         }

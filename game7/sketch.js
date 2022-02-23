@@ -12,6 +12,7 @@ var jumpSound;
 var collectSound;
 var dieSound;
 var winSound;
+var failSound;
 
 function preload() {
     soundFormats('mp3');
@@ -26,6 +27,8 @@ function preload() {
     dieSound = new Audio('assets/die2.mp3');
 
     winSound = new Audio('assets/win2.mp3');
+
+    failSound = new Audio('assets/fail2.mp3');
 }
 
 /*
@@ -859,7 +862,10 @@ function noLives() {
     stroke(0);
     textSize(width / 25);
     text("Game over. Press space to continue.", width / 6, height / 2);
-    gameOver = true;
+    if (!gameOver) {
+        failSound.play();
+        gameOver = true;
+    }
 }
 
 // Function to end the game when the flagpole is reached.

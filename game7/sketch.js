@@ -639,6 +639,7 @@ function checkFlagpole() {
 function displayScore() {
     fill(255);
     textSize(width / 50);
+    textAlign(LEFT);
     text("SCORE: " + game_score, 20, 25);
 }
 
@@ -861,8 +862,10 @@ function checkPlayerDie() {
 function noLives() {
     fill(255);
     stroke(0);
+    strokeWeight(5);
     textSize(width / 25);
-    text("Game over. Press space to continue.", width / 6, height / 2);
+    textAlign(CENTER);
+    text("Game over! Press SPACE to continue.", width / 2, height / 2);
     if (!gameOver) {
         failSound.play();
         gameOver = true;
@@ -874,8 +877,11 @@ function noLives() {
 function flagpoleReached() {
     fill(255);
     stroke(0);
+    strokeWeight(5);
     textSize(width / 25);
-    text("Level complete. Press space to continue.", width / 7, height / 2);
+    textAlign(CENTER);
+    text("Level complete. Press SPACE to continue.", width / 2, height / 2);
+    text("Final score: " + game_score, width / 2, height * 0.6);
     if (!gameOver) {
         winSound.play();
         gameOver = true;

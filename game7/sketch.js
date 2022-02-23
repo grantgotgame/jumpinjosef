@@ -7,9 +7,11 @@ https://freesound.org/ (or I could record my own)
 
 */
 
+// declare sounds
 var jumpSound;
 var collectSound;
 var dieSound;
+var winSound;
 
 function preload() {
     soundFormats('mp3');
@@ -22,6 +24,8 @@ function preload() {
     collectSound.volume = 0.5;
 
     dieSound = new Audio('assets/die2.mp3');
+
+    winSound = new Audio('assets/win2.mp3');
 }
 
 /*
@@ -865,5 +869,8 @@ function flagpoleReached() {
     stroke(0);
     textSize(width / 25);
     text("Level complete. Press space to continue.", width / 7, height / 2);
-    gameOver = true;
+    if (!gameOver) {
+        winSound.play();
+        gameOver = true;
+    }
 }

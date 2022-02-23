@@ -3,18 +3,25 @@
 - Copy your game project code into this file
 - for the p5.Sound library look here https://p5js.org/reference/#/libraries/p5.sound
 - for finding cool sounds perhaps look here
-https://freesound.org/
+https://freesound.org/ (or I could record my own)
 
 */
 
 var jumpSound;
+var collectSound;
+var dieSound;
 
 function preload() {
-    soundFormats('mp3', 'wav');
+    soundFormats('mp3');
 
     //load your sounds here
     jumpSound = new Audio('assets/jump3.mp3');
-    jumpSound.volume = 0.5;
+    jumpSound.volume = 0.7;
+
+    collectSound = new Audio('assets/collect2.mp3');
+    collectSound.volume = 0.5;
+
+    dieSound = new Audio('assets/die2.mp3');
 }
 
 /*
@@ -156,6 +163,8 @@ function draw() {
     //Logic to make the game character plummet.
     if (isPlummeting) {
         gameChar.y_pos += 5;
+        isLeft = false;
+        isRight = false;
         checkPlayerDie();
     }
 
@@ -183,7 +192,7 @@ function keyPressed() {
 
     // if statements to control the animation of the character when
     // keys are pressed.
-    if (!gameOver) {
+    if (!gameOver && !isPlummeting) {
         if (keyCode == LEFT_ARROW) {
             isLeft = true;
         }
@@ -544,10 +553,10 @@ function checkCanyon(t_canyon) {
     //character plummets if canyon is touched
     if (gameChar.world_x_pos > t_canyon.x_pos &&
         gameChar.world_x_pos < t_canyon.x_pos + t_canyon.width &&
-        gameChar.y_pos >= floorPos_y) {
+        gameChar.y_pos >= floorPos_y &&
+        !isPlummeting) {
         isPlummeting = true;
-        isRight = false;
-        isLeft = false;
+        dieSound.play();
     }
 }
 
@@ -576,6 +585,7 @@ function checkCollectable(t_collectable) {
     if (dist(gameChar.world_x_pos, gameChar.y_pos - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
         t_collectable.isFound = true;
         game_score += 1;
+        collectSound.play();
     }
 }
 

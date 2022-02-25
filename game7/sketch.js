@@ -177,20 +177,25 @@ function draw() {
             isFalling = false;
         }
         else {
-            gameChar.y_pos += 2;
             isFalling = true;
+            gameChar.y_pos += 2;
         }
     }
     else {
         isFalling = false;
     }
 
-    //Logic to make the game character plummet.
+    // Logic to make the game character plummet.
     if (isPlummeting) {
         gameChar.y_pos += 5;
         isLeft = false;
         isRight = false;
         checkPlayerDie();
+    }
+
+    // Logic to prevent character from going below ground.
+    if (!isPlummeting && gameChar.y_pos > floorPos_y) {
+        gameChar.y_pos = floorPos_y;
     }
 
     // Update real position of gameChar for collision detection.
@@ -237,7 +242,7 @@ function keyPressed() {
         //drop through platforms
         if ((keyCode == DOWN_ARROW || key == 's') && overPlatform) {
             var p = checkPlatforms() - 1;
-            gameChar.y_pos += platforms[p].y_size;
+            gameChar.y_pos = platforms[p].y_pos + platforms[p].y_size + 1;
         }
     }
 
@@ -591,6 +596,7 @@ function checkPlatforms() {
             gameChar.y_pos < platforms[i].y_pos + platforms[i].y_size) {
             o++;
             p = i;
+            gameChar.y_pos = platforms[i].y_pos;
         }
     }
     if (o > 0) {

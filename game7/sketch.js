@@ -41,6 +41,7 @@ var clouds;
 var mountains;
 var trees_x;
 var canyons;
+var platforms;
 var collectables;
 var flagpole;
 var flag;
@@ -53,6 +54,7 @@ var isLeft;
 var isRight;
 var isFalling;
 var isPlummeting;
+var overPlatform;
 
 var game_score;
 var lives;
@@ -110,6 +112,18 @@ function draw() {
         checkCanyon(canyons[i]); //check for collisions
     }
 
+    // Draw platforms.
+    for (i = 0; i < platforms.length; i++) {
+        drawPlatforms();
+    }
+    //check for collisions
+    if (checkPlatforms() > 0) {
+        overPlatform = true;
+    }
+    else {
+        overPlatform = false;
+    }
+
     // Draw collectable items.
     for (i = 0; i < collectables.length; i++) {
         if (!collectables[i].isFound) {
@@ -157,10 +171,15 @@ function draw() {
         }
     }
 
-    // Logic to make the game character rise and fall.
+    // Logic to make the game character fall.
     if (gameChar.y_pos < floorPos_y) {
-        gameChar.y_pos += 2;
-        isFalling = true;
+        if (overPlatform) {
+            isFalling = false;
+        }
+        else {
+            gameChar.y_pos += 2;
+            isFalling = true;
+        }
     }
     else {
         isFalling = false;
@@ -207,7 +226,7 @@ function keyPressed() {
             isRight = true;
         }
 
-        if ((keyCode == 32 || key == "w") && gameChar.y_pos == floorPos_y) {
+        if ((keyCode == 32 || key == "w") && !isFalling) {
             gameChar.y_pos -= 100;
             jumpSound.play();
         }
@@ -535,6 +554,37 @@ function drawTrees() {
 }
 
 // ---------------------------------
+// Platform render and check functions
+// ---------------------------------
+
+// Function to draw platform objects.
+
+function drawPlatforms() {
+    //begin platform drawing
+
+    fill("fuchsia");
+    stroke("purple");
+    rect(platforms[i].x_pos, platforms[i].y_pos, platforms[i].x_size, platforms[i].y_size);
+
+    //end platform drawing
+}
+
+// Function to check if character is over a platform.
+function checkPlatforms() {
+    //character stops falling if platform is touched
+    var o = 0;
+    for (i = 0; i < platforms.length; i++) {
+        if (gameChar.world_x_pos >= platforms[i].x_pos &&
+            gameChar.world_x_pos <= platforms[i].x_pos + platforms[i].x_size &&
+            gameChar.y_pos >= platforms[i].y_pos &&
+            gameChar.y_pos <= platforms[i].y_pos + platforms[i].y_size) {
+            o++;
+        }
+    }
+    return o;
+}
+
+// ---------------------------------
 // Canyon render and check functions
 // ---------------------------------
 
@@ -544,11 +594,11 @@ function drawCanyon(t_canyon) {
     //begin canyon drawing
 
     fill(33, 10, 6);
-    rect(t_canyon.x_pos, floorPos_y, t_canyon.width, height);
+    rect(t_canyon.x_pos, floorPos_y, t_canyon.size, height);
     fill(240, 36, 0);
     triangle(t_canyon.x_pos, floorPos_y,
-        t_canyon.x_pos + t_canyon.width, floorPos_y,
-        t_canyon.x_pos + t_canyon.width / 2, height);
+        t_canyon.x_pos + t_canyon.size, floorPos_y,
+        t_canyon.x_pos + t_canyon.size / 2, height);
 
     //end canyon drawing
 }
@@ -558,7 +608,7 @@ function drawCanyon(t_canyon) {
 function checkCanyon(t_canyon) {
     //character plummets if canyon is touched
     if (gameChar.world_x_pos > t_canyon.x_pos &&
-        gameChar.world_x_pos < t_canyon.x_pos + t_canyon.width &&
+        gameChar.world_x_pos < t_canyon.x_pos + t_canyon.size &&
         gameChar.y_pos >= floorPos_y &&
         !isPlummeting) {
         isPlummeting = true;
@@ -575,8 +625,10 @@ function checkCanyon(t_canyon) {
 function drawCollectable(t_collectable) {
     //begin collectable drawing
 
+    stroke("indigo");
     fill(255, 247, 0);
     ellipse(t_collectable.x_pos, t_collectable.y_pos, t_collectable.size * 0.5);
+    stroke(100);
     fill(217, 166, 28);
     rect(t_collectable.x_pos - t_collectable.size * 0.05, t_collectable.y_pos - t_collectable.size * 0.15,
         t_collectable.size * 0.1, t_collectable.size * 0.3);
@@ -590,7 +642,7 @@ function checkCollectable(t_collectable) {
     //gather collectable when touched
     if (dist(gameChar.world_x_pos, gameChar.y_pos - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
         t_collectable.isFound = true;
-        game_score += ceil(t_collectable.size/50);
+        game_score += ceil(t_collectable.size / 50);
         collectSound.play();
     }
 }
@@ -604,6 +656,7 @@ function checkCollectable(t_collectable) {
 function renderFlagpole() {
     //draw the pole
     fill(100);
+    noStroke();
     rect(flagpole.x_pos, floorPos_y, flagpole.x_size, -flagpole.y_size);
     //draw the flag in up position when it's reached
     if (flagpole.isReached) {
@@ -662,15 +715,19 @@ function displayLives() {
 
         //draw left eye
         line(width - lives_x_pos - lives_x_dist * i - 10, lives_y_pos - 52,
-            width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+            width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55
+        );
         line(width - lives_x_pos - lives_x_dist * i - 4, lives_y_pos - 52,
-            width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55);
+            width - lives_x_pos - lives_x_dist * i - 7, lives_y_pos - 55
+        );
 
         //draw right eye
         line(width - lives_x_pos - lives_x_dist * i + 10, lives_y_pos - 52,
-            width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+            width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55
+        );
         line(width - lives_x_pos - lives_x_dist * i + 4, lives_y_pos - 52,
-            width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55);
+            width - lives_x_pos - lives_x_dist * i + 7, lives_y_pos - 55
+        );
     }
 }
 
@@ -766,23 +823,38 @@ function startGame() {
     //initialize canyons
     canyons = [{
         x_pos: 50,
-        width: 100
+        size: 100
     }, {
         x_pos: 250,
-        width: 75
+        size: 75
     }, {
         x_pos: 750,
-        width: 50
+        size: 50
     }, {
         x_pos: -850,
-        width: 500
+        size: 500
     }, {
         x_pos: 1670,
-        width: 80
+        size: 80
     }, {
         x_pos: 7050,
-        width: 5000
+        size: 5000
     }];
+
+    //initialize platforms
+    platforms = [{
+        x_pos: 375,
+        y_pos: 350,
+        x_size: 100,
+        y_size: 5
+    },
+    {
+        x_pos: 375,
+        y_pos: 275,
+        x_size: 75,
+        y_size: 10
+    }
+    ];
 
     //initialize collectables (set to 50 or 100 for best results)
     collectables = [{
@@ -800,10 +872,6 @@ function startGame() {
     }, {
         x_pos: 1800,
         y_pos: 340,
-        size: 50
-    }, {
-        x_pos: -800,
-        y_pos: 350,
         size: 50
     }, {
         x_pos: 900,

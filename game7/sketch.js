@@ -199,15 +199,15 @@ function keyPressed() {
     // if statements to control the animation of the character when
     // keys are pressed.
     if (!gameOver && !isPlummeting) {
-        if (keyCode == LEFT_ARROW) {
+        if (keyCode == LEFT_ARROW || key == "a") {
             isLeft = true;
         }
 
-        if (keyCode == RIGHT_ARROW) {
+        if (keyCode == RIGHT_ARROW || key == "d") {
             isRight = true;
         }
 
-        if (keyCode == 32 && gameChar.y_pos == floorPos_y) {
+        if ((keyCode == 32 || key == "w") && gameChar.y_pos == floorPos_y) {
             gameChar.y_pos -= 100;
             jumpSound.play();
         }
@@ -225,11 +225,11 @@ function keyReleased() {
     // if statements to control the animation of the character when
     // keys are released.
 
-    if (keyCode == LEFT_ARROW) {
+    if (keyCode == LEFT_ARROW || key == "a") {
         isLeft = false;
     }
 
-    if (keyCode == RIGHT_ARROW) {
+    if (keyCode == RIGHT_ARROW || key == "d") {
         isRight = false;
     }
 }

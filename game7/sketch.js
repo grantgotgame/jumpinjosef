@@ -117,7 +117,7 @@ function draw() {
         drawPlatforms();
     }
     //check for collisions
-    if (checkPlatforms() > 0) {
+    if (checkPlatforms()) {
         overPlatform = true;
     }
     else {
@@ -218,17 +218,26 @@ function keyPressed() {
     // if statements to control the animation of the character when
     // keys are pressed.
     if (!gameOver && !isPlummeting) {
+        //move left
         if (keyCode == LEFT_ARROW || key == "a") {
             isLeft = true;
         }
 
+        //move right
         if (keyCode == RIGHT_ARROW || key == "d") {
             isRight = true;
         }
 
-        if ((keyCode == 32 || key == "w") && !isFalling) {
+        //jump
+        if ((keyCode == UP_ARROW || keyCode == 32 || key == "w") && !isFalling) {
             gameChar.y_pos -= 100;
             jumpSound.play();
+        }
+
+        //drop through platforms
+        if ((keyCode == DOWN_ARROW || key == 's') && overPlatform) {
+            var p = checkPlatforms() - 1;
+            gameChar.y_pos += platforms[p].y_size;
         }
     }
 
@@ -564,6 +573,7 @@ function drawPlatforms() {
 
     fill("fuchsia");
     stroke("purple");
+    strokeWeight(1);
     rect(platforms[i].x_pos, platforms[i].y_pos, platforms[i].x_size, platforms[i].y_size);
 
     //end platform drawing
@@ -573,15 +583,19 @@ function drawPlatforms() {
 function checkPlatforms() {
     //character stops falling if platform is touched
     var o = 0;
+    var p;
     for (i = 0; i < platforms.length; i++) {
         if (gameChar.world_x_pos >= platforms[i].x_pos &&
             gameChar.world_x_pos <= platforms[i].x_pos + platforms[i].x_size &&
             gameChar.y_pos >= platforms[i].y_pos &&
-            gameChar.y_pos <= platforms[i].y_pos + platforms[i].y_size) {
+            gameChar.y_pos < platforms[i].y_pos + platforms[i].y_size) {
             o++;
+            p = i;
         }
     }
-    return o;
+    if (o > 0) {
+    return p + 1;
+    }
 }
 
 // ---------------------------------
@@ -626,6 +640,7 @@ function drawCollectable(t_collectable) {
     //begin collectable drawing
 
     stroke("indigo");
+    strokeWeight(1);
     fill(255, 247, 0);
     ellipse(t_collectable.x_pos, t_collectable.y_pos, t_collectable.size * 0.5);
     stroke(100);

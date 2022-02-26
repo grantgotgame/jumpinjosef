@@ -113,7 +113,7 @@ function draw() {
     }
 
     // Draw platforms.
-    for (i = 0; i < platforms.length; i++) {
+    for (i = 0; i < platforms.arr.length; i++) {
         drawPlatforms();
     }
     //check for collisions
@@ -236,7 +236,7 @@ function keyPressed() {
 
         //drop through platforms
         if ((keyCode == DOWN_ARROW || key == 's') && overPlatform) {
-            gameChar.y_pos = platforms[overPlatformIndex].y_pos + platforms[overPlatformIndex].y_size + 1;
+            gameChar.y_pos = platforms.arr[overPlatformIndex].y_pos + platforms.y_size + 1;
         }
     }
 
@@ -608,7 +608,9 @@ function drawPlatforms() {
     fill(255, 0, 255, 128);
     stroke("purple");
     strokeWeight(1);
-    rect(platforms[i].x_pos, platforms[i].y_pos, platforms[i].x_size, platforms[i].y_size);
+    for (i = 0; i < platforms.arr.length; i++) {
+        rect(platforms.arr[i].x_pos, platforms.arr[i].y_pos, platforms.x_size, platforms.y_size);
+    }
 
     //end platform drawing
 }
@@ -616,14 +618,14 @@ function drawPlatforms() {
 // Function to check if character is over a platform.
 function checkPlatforms() {
     //detect collision if character would fall through top of platform
-    for (i = 0; i < platforms.length; i++) {
-        if (gameChar.world_x_pos >= platforms[i].x_pos &&
-            gameChar.world_x_pos <= platforms[i].x_pos + platforms[i].x_size &&
-            gameChar.y_pos <= platforms[i].y_pos &&
-            gameChar.y_pos + gameChar.fallSpeed >= platforms[i].y_pos) {
+    for (i = 0; i < platforms.arr.length; i++) {
+        if (gameChar.world_x_pos >= platforms.arr[i].x_pos &&
+            gameChar.world_x_pos <= platforms.arr[i].x_pos + platforms.x_size &&
+            gameChar.y_pos <= platforms.arr[i].y_pos &&
+            gameChar.y_pos + gameChar.fallSpeed >= platforms.arr[i].y_pos) {
             overPlatform = true;
             overPlatformIndex = i;
-            gameChar.y_pos = platforms[i].y_pos;
+            gameChar.y_pos = platforms.arr[i].y_pos;
             return true;
         }
     }
@@ -890,45 +892,49 @@ function startGame() {
     }];
 
     //initialize platforms
-    platforms = [{
-        x_pos: 375,
-        y_pos: 350,
+    platforms = {
         x_size: 100,
-        y_size: 5
-    },
-    {
-        x_pos: 375,
-        y_pos: 275,
-        x_size: 75,
-        y_size: 10
-    }
-    ];
+        y_size: 10,
+        min_x_pos: 0,
+        max_x_pos: 2000,
+        min_y_pos: 200,
+        max_y_pos: floorPos_y - 75,
+        x_dist: 300,
+        y_dist: 75,
+        arr: [],
+        generatePlatforms: function () {
+            for (x = this.min_x_pos; x < this.max_x_pos; x += this.x_dist) {
+                for (y = this.max_y_pos; y >= this.min_y_pos; y -= this.y_dist) {
+                    var platform = { x_pos: x, y_pos: y };
+                    platforms.arr.push(platform);
+                }
+            }
+        }
+    };
+    //generate platforms
+    platforms.generatePlatforms();
 
     //initialize collectables (set size to 50 or 100 for best results)
     collectables = [{
-        x_pos: 200,
-        y_pos: 400,
-        size: 50
-    }, {
-        x_pos: 400,
-        y_pos: 300,
-        size: 100
-    }, {
-        x_pos: 800,
-        y_pos: 350,
-        size: 50
-    }, {
-        x_pos: 1800,
-        y_pos: 340,
-        size: 50
-    }, {
-        x_pos: 900,
-        y_pos: 375,
-        size: 100
-    }, {
         x_pos: -500,
         y_pos: 330,
         size: 100
+    }, {
+        x_pos: 200,
+        y_pos: 200,
+        size: 50
+    }, {
+        x_pos: 400,
+        y_pos: 100,
+        size: 100
+    }, {
+        x_pos: 800,
+        y_pos: 250,
+        size: 50
+    },  {
+        x_pos: 900,
+        y_pos: 175,
+        size: 50
     }, {
         x_pos: 1200,
         y_pos: 350,
@@ -941,6 +947,10 @@ function startGame() {
         x_pos: 1600,
         y_pos: 300,
         size: 50
+    },{
+        x_pos: 2000,
+        y_pos: 150,
+        size: 100
     }];
 
     //initialize flagpole

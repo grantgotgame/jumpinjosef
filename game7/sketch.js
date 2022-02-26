@@ -576,7 +576,7 @@ function drawTrees() {
 function drawPlatforms() {
     //begin platform drawing
 
-    fill("fuchsia");
+    fill(255, 0, 255, 128);
     stroke("purple");
     strokeWeight(1);
     rect(platforms[i].x_pos, platforms[i].y_pos, platforms[i].x_size, platforms[i].y_size);

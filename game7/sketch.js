@@ -62,7 +62,8 @@ var gameChar = {
     x_pos: 0, //positions are set in startGame()
     world_x_pos: 0,
     y_pos: 0,
-    fallSpeed: 2
+    fallSpeed: 4,
+    moveSpeed: 10
 };
 
 function setup() {
@@ -149,19 +150,19 @@ function draw() {
     // Logic to make the game character move or the background scroll.
     if (isLeft) {
         if (gameChar.x_pos > width * 0.2) {
-            gameChar.x_pos -= 5;
+            gameChar.x_pos -= gameChar.moveSpeed;
         }
         else {
-            scrollPos += 5;
+            scrollPos += gameChar.moveSpeed;
         }
     }
 
     if (isRight) {
-        if (gameChar.x_pos < width * 0.8) {
-            gameChar.x_pos += 5;
+        if (gameChar.x_pos < width * 0.7) {
+            gameChar.x_pos += gameChar.moveSpeed;
         }
         else {
-            scrollPos -= 5; // negative for moving against the background
+            scrollPos -= gameChar.moveSpeed; // negative for moving against the background
         }
     }
 

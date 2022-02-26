@@ -269,8 +269,43 @@ function keyReleased() {
 
 function drawGameChar() {
 
+    //plummeting code
+    if (isPlummeting) {
+
+        //begin character drawing
+
+        //body
+        stroke(0);
+        fill(153, 51, 47);
+        triangle(gameChar.x_pos - 13, gameChar.y_pos - 7, gameChar.x_pos + 13, gameChar.y_pos - 7, gameChar.x_pos, gameChar.y_pos - 64);
+
+        //feet
+        fill(71, 43, 12);
+        ellipse(gameChar.x_pos - 13, gameChar.y_pos - 7, 20); //left
+        ellipse(gameChar.x_pos + 13, gameChar.y_pos - 7, 20); //right
+
+        //head
+        fill(235, 152, 181);
+        ellipse(gameChar.x_pos, gameChar.y_pos - 52, 30);
+
+        //mouth
+        fill(0);
+        ellipse(gameChar.x_pos, gameChar.y_pos - 44, 5);
+
+        //left eye
+        line(gameChar.x_pos - 10, gameChar.y_pos - 52, gameChar.x_pos - 4, gameChar.y_pos - 58);
+        line(gameChar.x_pos - 4, gameChar.y_pos - 52, gameChar.x_pos - 10, gameChar.y_pos - 58);
+
+        //right eye
+        line(gameChar.x_pos + 10, gameChar.y_pos - 52, gameChar.x_pos + 4, gameChar.y_pos - 58);
+        line(gameChar.x_pos + 4, gameChar.y_pos - 52, gameChar.x_pos + 10, gameChar.y_pos - 58);
+
+        //end character drawing
+
+    }
+
     // jumping-left code
-    if (isLeft && isFalling) {
+    else if (isLeft && isFalling) {
 
         //begin character drawing
 
@@ -418,7 +453,7 @@ function drawGameChar() {
     }
 
     // jumping facing forwards code
-    else if (isFalling || isPlummeting) {
+    else if (isFalling) {
 
         //begin character drawing
 

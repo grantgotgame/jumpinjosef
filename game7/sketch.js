@@ -1,9 +1,6 @@
 /*
 
-- Copy your game project code into this file
-- for the p5.Sound library look here https://p5js.org/reference/#/libraries/p5.sound
-- for finding cool sounds perhaps look here
-https://freesound.org/ (or I could record my own)
+Welcome to Jumpin' Josef!
 
 */
 
@@ -55,6 +52,7 @@ var isRight;
 var isFalling;
 var isPlummeting;
 var overPlatform;
+var overPlatformIndex;
 
 var game_score;
 var lives;
@@ -63,7 +61,8 @@ var gameOver;
 var gameChar = {
     x_pos: 0, //positions are set in startGame()
     world_x_pos: 0,
-    y_pos: 0
+    y_pos: 0,
+    fallSpeed: 2
 };
 
 function setup() {
@@ -117,12 +116,7 @@ function draw() {
         drawPlatforms();
     }
     //check for collisions
-    if (checkPlatforms()) {
-        overPlatform = true;
-    }
-    else {
-        overPlatform = false;
-    }
+    checkPlatforms();
 
     // Draw collectable items.
     for (i = 0; i < collectables.length; i++) {
@@ -178,7 +172,7 @@ function draw() {
         }
         else {
             isFalling = true;
-            gameChar.y_pos += 2;
+            gameChar.y_pos += gameChar.fallSpeed;
         }
     }
     else {
@@ -241,8 +235,7 @@ function keyPressed() {
 
         //drop through platforms
         if ((keyCode == DOWN_ARROW || key == 's') && overPlatform) {
-            var p = checkPlatforms() - 1;
-            gameChar.y_pos = platforms[p].y_pos + platforms[p].y_size + 1;
+            gameChar.y_pos = platforms[overPlatformIndex].y_pos + platforms[overPlatformIndex].y_size + 1;
         }
     }
 
@@ -586,22 +579,20 @@ function drawPlatforms() {
 
 // Function to check if character is over a platform.
 function checkPlatforms() {
-    //character stops falling if platform is touched
-    var o = 0;
-    var p;
+    //detect collision if character would fall through top of platform
     for (i = 0; i < platforms.length; i++) {
         if (gameChar.world_x_pos >= platforms[i].x_pos &&
             gameChar.world_x_pos <= platforms[i].x_pos + platforms[i].x_size &&
-            gameChar.y_pos >= platforms[i].y_pos &&
-            gameChar.y_pos < platforms[i].y_pos + platforms[i].y_size) {
-            o++;
-            p = i;
+            gameChar.y_pos <= platforms[i].y_pos &&
+            gameChar.y_pos + gameChar.fallSpeed >= platforms[i].y_pos) {
+            overPlatform = true;
+            overPlatformIndex = i;
             gameChar.y_pos = platforms[i].y_pos;
+            return true;
         }
     }
-    if (o > 0) {
-    return p + 1;
-    }
+    //set overPlatform to false if no collisions are detected
+    overPlatform = false;
 }
 
 // ---------------------------------
@@ -877,7 +868,7 @@ function startGame() {
     }
     ];
 
-    //initialize collectables (set to 50 or 100 for best results)
+    //initialize collectables (set size to 50 or 100 for best results)
     collectables = [{
         x_pos: 200,
         y_pos: 400,

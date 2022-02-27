@@ -12,6 +12,9 @@ I learned a lot about the proper use of objects, arrays, functions, and methods.
 
 */
 
+// variable to track whether the game has started
+var gameStarted = false;
+
 // declare sounds
 var jumpSound;
 var collectSound;
@@ -99,8 +102,10 @@ function setup() {
     lives = 3;
 
     //Let the music play!
-    music.currentTime = 0;
-    music.play();
+    if (gameStarted) {
+        music.currentTime = 0;
+        music.play();
+    }
 
     // Start game
     gameOver = false;
@@ -110,6 +115,12 @@ function setup() {
 function draw() {
     background("LightSkyBlue"); // fill the sky blue
 
+    // display title screen if game has not started
+    if (!gameStarted) {
+        titleScreen();
+        return 0; //exit draw loop
+    }
+
     //begin background scroll
     push();
     translate(scrollPos, 0);
@@ -117,12 +128,6 @@ function draw() {
     // Draw clouds.
     for (i = 0; i < clouds.arr.length; i++) {
         drawCloud(clouds.arr[i]);
-
-        //replace clouds when they move outside allowed range
-        if (clouds.arr[i].x_pos > clouds.max_x_pos) {
-            clouds.arr.splice(i, 1);
-            clouds.createCloud(clouds.min_x_pos);
-        }
     }
 
     // Draw the ground (without background scroll).
@@ -172,13 +177,13 @@ function draw() {
     // Logic to end the game when lives are exhausted
     if (lives < 1) {
         noLives();
-        return (0); //exit draw loop
+        return 0; //exit draw loop
     }
 
     // Logic to end the game when the flagpole is reached
     if (flagpole.isReached) {
         flagpoleReached();
-        return (1); //exit draw loop
+        return 1; //exit draw loop
     }
 
     // Draw game character.
@@ -255,7 +260,7 @@ function keyPressed() {
 
     // if statements to control the animation of the character when
     // keys are pressed.
-    if (!gameOver && !isPlummeting) {
+    if (!gameOver && !isPlummeting && gameStarted) {
         //move left
         if (keyCode == LEFT_ARROW || key == "a") {
             isLeft = true;
@@ -283,6 +288,12 @@ function keyPressed() {
     if (gameOver && keyCode == 32) {
         setup();
     }
+
+    // if statement to exit the title screen when spacebar is pressed
+    if (!gameStarted && keyCode == 32) {
+        gameStarted = true;
+        setup();
+    }
 }
 
 function keyReleased() {
@@ -307,6 +318,7 @@ function keyReleased() {
 // Function to draw the game character.
 
 function drawGameChar() {
+    strokeWeight(1);
 
     //plummeting code
     if (isPlummeting) {
@@ -585,6 +597,12 @@ function drawCloud(cloud) {
 
     //move cloud across the screen
     cloud.x_pos += clouds.speed;
+
+    //replace clouds when they move outside allowed range
+    if (cloud.x_pos > clouds.max_x_pos) {
+        clouds.arr.splice(i, 1);
+        clouds.createCloud(clouds.min_x_pos);
+    }
 }
 
 // Function to draw mountains objects.
@@ -785,15 +803,16 @@ function checkFlagpole() {
 function displayScore() {
     fill(255);
     stroke(0);
-    strokeWeight(1);
-    textSize(width / 50);
+    strokeWeight(3);
+    textSize(width / 40);
     textAlign(LEFT);
-    text("SCORE: " + game_score, 20, 25);
+    text("SCORE: " + game_score, 15, 35);
 }
 
 // Function to display lives in top right corner of screen.
 
 function displayLives() {
+    strokeWeight(1);
     // Initialize variables for positioning lives
     var lives_x_pos = 20;
     var lives_y_pos = 75;
@@ -829,6 +848,28 @@ function displayLives() {
 }
 
 // ----------------------------------
+// Title screen function
+// ----------------------------------
+
+function titleScreen() {
+    // Draw clouds.
+    for (i = 0; i < clouds.arr.length; i++) {
+        drawCloud(clouds.arr[i]);
+    }
+
+    //display title text
+    fill(255);
+    stroke(0);
+    strokeWeight(5);
+    textSize(width / 25);
+    textAlign(CENTER);
+    text("Welcome to Jumpin' Josef!", width / 2, height * 0.35);
+    text("Created by Grant Howard Brown", width / 2, height * 0.45);
+    text("Controls: WASD or arrow keys", width / 2, height * 0.55);
+    text("Press SPACE to begin", width / 2, height * 0.65);
+}
+
+// ----------------------------------
 // Game start and restart function
 // ----------------------------------
 
@@ -855,7 +896,9 @@ function startGame() {
     isFalling = false;
     isPlummeting = false;
 
-    // Initialise arrays of scenery objects.
+    // ----------------------------------
+    // Initialize scenery objects
+    // ----------------------------------
 
     //initialize trees
     trees_x = [200, 350, 700, 850, 1000, 1150, -150, -300,
@@ -867,7 +910,7 @@ function startGame() {
         min_x_pos: -2000,
         max_x_pos: 4000,
         min_y_pos: -150,
-        max_y_pos: height,
+        max_y_pos: height + 150,
         minSize: 25,
         maxSize: 150,
         speed: 2,
@@ -985,7 +1028,7 @@ function startGame() {
         size: 50
     }, {
         x_pos: 2000,
-        y_pos: 150,
+        y_pos: 100,
         size: 100
     }];
 
@@ -1043,8 +1086,8 @@ function flagpoleReached() {
     strokeWeight(5);
     textSize(width / 25);
     textAlign(CENTER);
-    text("You're a winner! Press SPACE to play again.", width / 2, height / 2);
-    text("Final score: " + game_score + " / 42", width / 2, height * 0.6);
+    text("You're a winner! Press SPACE to play again.", width / 2, height * 0.45);
+    text("Final score: " + game_score + " / 42", width / 2, height * 0.55);
     if (!gameOver) {
         winSound.play();
         gameOver = true;

@@ -3,6 +3,13 @@
 Welcome to Jumpin' Josef!
 Created by Grant Howard Brown.
 
+Summary for Graders:
+I decided to do two extensions. I added sounds that I recorded and edited myself and I added platforms using a nested for loop because, frankly, I find level design tedious, especially in javascript, and I thought this would be more technically challenging anyway. I used a constructor function to build an array of randomized clouds that scroll across the sky and are replaced when they go out of range.
+
+The platforms were difficult, especially since I did them before realizing there was a tutorial video! I am proud of the way I implemented platform collision detection and I even wrote some code to let the player drop down through the platforms by pressing the S key or down arrow.
+
+I learned a lot about the proper use of objects, arrays, functions, and methods. I definitely improved as a coder! I think my favorite part of the coding process is refactoring as I go along. I found myself rewriting code constantly and tweaking game mechanics to make them more fun and interesting.
+
 */
 
 // declare sounds
@@ -118,7 +125,7 @@ function draw() {
         }
     }
 
-    // Draw the ground.
+    // Draw the ground (without background scroll).
     pop();
     noStroke();
     fill("Green");
@@ -165,13 +172,13 @@ function draw() {
     // Logic to end the game when lives are exhausted
     if (lives < 1) {
         noLives();
-        return (0);
+        return (0); //exit draw loop
     }
 
     // Logic to end the game when the flagpole is reached
     if (flagpole.isReached) {
         flagpoleReached();
-        return (1);
+        return (1); //exit draw loop
     }
 
     // Draw game character.
@@ -206,6 +213,7 @@ function draw() {
             gameChar.y_pos += gameChar.fallSpeed;
         }
     }
+    // Stop falling when character reaches ground level.
     else {
         isFalling = false;
     }
@@ -776,6 +784,8 @@ function checkFlagpole() {
 
 function displayScore() {
     fill(255);
+    stroke(0);
+    strokeWeight(1);
     textSize(width / 50);
     textAlign(LEFT);
     text("SCORE: " + game_score, 20, 25);
@@ -784,11 +794,13 @@ function displayScore() {
 // Function to display lives in top right corner of screen.
 
 function displayLives() {
+    // Initialize variables for positioning lives
+    var lives_x_pos = 20;
+    var lives_y_pos = 75;
+    var lives_x_dist = 35;
+
+    //draw the lives
     for (i = 0; i < lives; i++) {
-        // Initialize variables for positioning lives
-        var lives_x_pos = 20;
-        var lives_y_pos = 75;
-        var lives_x_dist = 35;
 
         //draw head
         fill(235, 152, 181);
@@ -1015,7 +1027,7 @@ function noLives() {
     strokeWeight(5);
     textSize(width / 25);
     textAlign(CENTER);
-    text("Game over! Press SPACE to continue.", width / 2, height / 2);
+    text("Game over! Press SPACE to try again.", width / 2, height / 2);
     if (!gameOver) {
         failSound.play();
         gameOver = true;
@@ -1031,8 +1043,8 @@ function flagpoleReached() {
     strokeWeight(5);
     textSize(width / 25);
     textAlign(CENTER);
-    text("Level complete. Press SPACE to continue.", width / 2, height / 2);
-    text("Final score: " + game_score, width / 2, height * 0.6);
+    text("You're a winner! Press SPACE to play again.", width / 2, height / 2);
+    text("Final score: " + game_score + " / 42", width / 2, height * 0.6);
     if (!gameOver) {
         winSound.play();
         gameOver = true;

@@ -11,6 +11,7 @@ var collectSound;
 var dieSound;
 var winSound;
 var failSound;
+var music;
 
 // helper function to play audio that may or may not already be playing
 function playSound(sound) {
@@ -37,6 +38,10 @@ function preload() {
     winSound = new Audio('assets/win2.mp3');
 
     failSound = new Audio('assets/fail2.mp3');
+
+    music = new Audio('assets/music2.mp3');
+    music.volume = 0.1;
+    music.loop = true;
 }
 
 /*
@@ -85,6 +90,10 @@ function setup() {
 
     // Initialize lives
     lives = 3;
+
+    //Let the music play!
+    music.currentTime = 0;
+    music.play();
 
     // Start game
     gameOver = false;
@@ -1010,6 +1019,7 @@ function noLives() {
     if (!gameOver) {
         failSound.play();
         gameOver = true;
+        music.pause();
     }
 }
 
@@ -1026,5 +1036,6 @@ function flagpoleReached() {
     if (!gameOver) {
         winSound.play();
         gameOver = true;
+        music.pause();
     }
 }

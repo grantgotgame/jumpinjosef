@@ -1,6 +1,7 @@
 /*
 
 Welcome to Jumpin' Josef!
+Created by Grant Howard Brown.
 
 */
 
@@ -83,18 +84,28 @@ function setup() {
 function draw() {
     background("LightSkyBlue"); // fill the sky blue
 
-    noStroke();
-    fill("Green");
-    rect(0, floorPos_y, width, height / 4); // draw some green ground
-
     //begin background scroll
     push();
     translate(scrollPos, 0);
 
     // Draw clouds.
-    for (i = 0; i < clouds.length; i++) {
-        drawClouds();
+    for (i = 0; i < clouds.arr.length; i++) {
+        drawCloud(clouds.arr[i]);
+
+        //replace clouds when they move outside allowed range
+        if (clouds.arr[i].x_pos > clouds.max_x_pos) {
+            clouds.arr.splice(i, 1);
+            clouds.createCloud(clouds.min_x_pos);
+        }
     }
+
+    // Draw the ground.
+    pop();
+    noStroke();
+    fill("Green");
+    rect(0, floorPos_y, width, height / 4);
+    push();
+    translate(scrollPos, 0);
 
     // Draw mountains.
     for (i = 0; i < mountains.length; i++) {
@@ -534,21 +545,26 @@ function drawGameChar() {
 
 // Function to draw cloud objects.
 
-function drawClouds() {
+function drawCloud(cloud) {
     //begin cloud drawing
 
     fill(255);
-    ellipse(clouds[i].x_pos + clouds[i].size * 0.5, clouds[i].y_pos, clouds[i].size * 1.2);
-    ellipse(clouds[i].x_pos + clouds[i].size, clouds[i].y_pos, clouds[i].size);
-    ellipse(clouds[i].x_pos, clouds[i].y_pos, clouds[i].size);
+    noStroke();
+    ellipse(cloud.x_pos + cloud.size * 0.5, cloud.y_pos, cloud.size * 1.2);
+    ellipse(cloud.x_pos + cloud.size, cloud.y_pos, cloud.size);
+    ellipse(cloud.x_pos, cloud.y_pos, cloud.size);
 
     //end cloud drawing
+
+    //move cloud across the screen
+    cloud.x_pos += clouds.speed;
 }
 
 // Function to draw mountains objects.
 
 function drawMountains() {
     //begin mountain drawing
+    noStroke();
 
     //bases of mountains
     fill(205, 186, 217);
@@ -570,7 +586,7 @@ function drawMountains() {
     //right mountain
     triangle(mountains[i].x_pos + mountains[i].size * 1.76, floorPos_y - mountains[i].size * 1.32, //top
         mountains[i].x_pos + mountains[i].size * 2.17, floorPos_y - mountains[i].size * 0.88, //right
-        mountains[i].x_pos + mountains[i].size * 1.4, floorPos_y - mountains[i].size * 0.88); //left
+        mountains[i].x_pos + mountains[i].size * 1.42, floorPos_y - mountains[i].size * 0.88); //left
 
     //end mountain drawing
 }
@@ -815,39 +831,28 @@ function startGame() {
         1300, 1450, 1600, 1750, 2500, 2650, 3000, 3150];
 
     //initialize clouds
-    clouds = [{
-        x_pos: 200,
-        y_pos: 50,
-        size: 50
-    }, {
-        x_pos: 500,
-        y_pos: 150,
-        size: 100
-    }, {
-        x_pos: 700,
-        y_pos: 50,
-        size: 75
-    }, {
-        x_pos: 900,
-        y_pos: 200,
-        size: 25
-    }, {
-        x_pos: -500,
-        y_pos: 175,
-        size: 120
-    }, {
-        x_pos: 1200,
-        y_pos: 80,
-        size: 90
-    }, {
-        x_pos: 1500,
-        y_pos: 120,
-        size: 134
-    }, {
-        x_pos: 1900,
-        y_pos: 250,
-        size: 40
-    }];
+    clouds = {
+        arrSize: 100, //total number of clouds to generate
+        min_x_pos: -2000,
+        max_x_pos: 4000,
+        min_y_pos: -150,
+        max_y_pos: height,
+        minSize: 25,
+        maxSize: 150,
+        speed: 2,
+        arr: [],
+        createCloud: function (x) {
+            this.arr.push({
+                x_pos: x,
+                y_pos: random(this.min_y_pos, this.max_y_pos),
+                size: random(this.minSize, this.maxSize)
+            });
+        }
+    };
+    //generate clouds at random positions until cloud array is full
+    for (i = 0; i < clouds.arrSize; i++) {
+        clouds.createCloud(random(clouds.min_x_pos, clouds.max_x_pos));
+    }
 
     //initialize mountains
     mountains = [{
@@ -931,7 +936,7 @@ function startGame() {
         x_pos: 800,
         y_pos: 250,
         size: 50
-    },  {
+    }, {
         x_pos: 900,
         y_pos: 175,
         size: 50
@@ -947,7 +952,7 @@ function startGame() {
         x_pos: 1600,
         y_pos: 300,
         size: 50
-    },{
+    }, {
         x_pos: 2000,
         y_pos: 150,
         size: 100

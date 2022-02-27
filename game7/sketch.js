@@ -12,6 +12,16 @@ var dieSound;
 var winSound;
 var failSound;
 
+// helper function to play audio that may or may not already be playing
+function playSound(sound) {
+    if (sound.paused) {
+        sound.play();
+    }
+    else {
+        sound.currentTime = 0;
+    }
+}
+
 function preload() {
     soundFormats('mp3');
 
@@ -242,7 +252,7 @@ function keyPressed() {
         //jump
         if ((keyCode == UP_ARROW || keyCode == 32 || key == "w") && !isFalling) {
             gameChar.y_pos -= 100;
-            jumpSound.play();
+            playSound(jumpSound);
         }
 
         //drop through platforms
@@ -709,7 +719,7 @@ function checkCollectable(t_collectable) {
     if (dist(gameChar.world_x_pos, gameChar.y_pos - 35, t_collectable.x_pos, t_collectable.y_pos) < 55) {
         t_collectable.isFound = true;
         game_score += ceil(t_collectable.size / 50);
-        collectSound.play();
+        playSound(collectSound);
     }
 }
 

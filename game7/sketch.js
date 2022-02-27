@@ -863,10 +863,10 @@ function titleScreen() {
     strokeWeight(5);
     textSize(width / 25);
     textAlign(CENTER);
-    text("Welcome to Jumpin' Josef!", width / 2, height * 0.35);
+    text("JUMPIN' JOSEF!", width / 2, height * 0.3);
     text("Created by Grant Howard Brown", width / 2, height * 0.45);
-    text("Controls: WASD or arrow keys", width / 2, height * 0.55);
-    text("Press SPACE to begin", width / 2, height * 0.65);
+    text("Controls: WASD or arrow keys", width / 2, height * 0.6);
+    text("Press SPACE to begin", width / 2, height * 0.75);
 }
 
 // ----------------------------------
